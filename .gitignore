@@ -1,0 +1,6 @@
+# vim
+.*.sw*
+
+# terraform
+terraform.tfvars
+.terraform
