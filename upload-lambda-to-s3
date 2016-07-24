@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+set -eo pipefail
+
+# source bucket name from terraform variables file
+source terraform.tfvars
+
+aws s3api put-object \
+    --bucket "$s3_bucket" \
+    --key "lambda.zip" \
+    --body "bin/lambda.zip"
+

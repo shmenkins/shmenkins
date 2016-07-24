@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+set -eo pipefail
+
+mkdir -p bin
+
+lambda_zip="bin/lambda.zip"
+rm -f "$lambda_zip"
+zip -r "$lambda_zip" lambda/*
