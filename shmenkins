@@ -1,12 +1,83 @@
 #!/usr/bin/env python
 """
-Usage: shmenkins COMMAND
+Usage: shmenkins clean|build|upload|plan-deploy|do-deploy
 
 Commands:
+    clean           remove build artifacts
     build           build lambda
     upload          upload lambda to S3
     plan-deploy     plan to deploy everything
     do-deploy       actually deploy everything
 """
 
-print("builder")
+from __future__ import print_function
+
+import docopt
+import os
+import shutil
+import zipfile
+
+
+def main(args):
+    if args["clean"]:
+        cmd_clean()
+    elif args["build"]:
+        cmd_build()
+    elif args["upload"]:
+        cmd_upload()
+    elif args["plan-deploy"]:
+        cmd_plan_deploy()
+    elif args["do-deploy"]:
+        cmd_do_deploy()
+    else:
+        raise ValueError("Unknown command")
+
+
+def cmd_clean():
+    remove_directory(_bin_dir)
+
+
+def zip_every_file_individually(source_dir, target_dir):
+    for root, dirs, files in os.walk(source_dir):
+        for file in files:
+            source_file = os.path.join(root, file)
+            target_file = target_dir + "/" + file + ".zip"
+            log(source_file + " -> ", end="")
+            with zipfile.ZipFile(target_file, "w", zipfile.ZIP_DEFLATED) as zipf:
+                zipf.write(source_file, file)
+                log(target_file)
+
+def cmd_build():
+    cmd_clean()
+    ensure_directory(_bin_lambda_dir)
+
+    zip_every_file_individually(_src_lambda_dir, _bin_lambda_dir)
+
+def cmd_upload():
+    pass
+
+def cmd_plan_deploy():
+    pass
+
+def cmd_do_deploy():
+    pass
+
+
+def remove_directory(path):
+    if os.path.isdir(path):
+        shutil.rmtree(path)
+        
+        
+def ensure_directory(path):
+    if not os.path.exists(path):
+        os.makedirs(path)
+        
+def log(message, end="\n"):
+    print(message, end=end)
+
+_src_lambda_dir = "src/lambda"
+_bin_dir = "bin"
+_bin_lambda_dir = _bin_dir + "/lambda"
+
+if __name__ == '__main__':
+    main(docopt.docopt(__doc__))
