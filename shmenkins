@@ -1,0 +1,12 @@
+#!/usr/bin/env python
+"""
+Usage: shmenkins COMMAND
+
+Commands:
+    build           build lambda
+    upload          upload lambda to S3
+    plan-deploy     plan to deploy everything
+    do-deploy       actually deploy everything
+"""
+
+print("builder")

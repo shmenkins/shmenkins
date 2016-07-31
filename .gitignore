@@ -1,9 +1,8 @@
-# vim
-.*.sw*
+# general
+.*
 
 # terraform
 terraform.tfvars
-.terraform
 
 # binaries
 bin
