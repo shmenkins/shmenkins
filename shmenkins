@@ -12,6 +12,7 @@ Commands:
 
 from __future__ import print_function
 
+import boto3
 import docopt
 import os
 import shutil
@@ -41,7 +42,7 @@ def zip_every_file_individually(source_dir, target_dir):
     for root, dirs, files in os.walk(source_dir):
         for file in files:
             source_file = os.path.join(root, file)
-            target_file = target_dir + "/" + file + ".zip"
+            target_file = os.path.join(target_dir, file + ".zip")
             log(source_file + " -> ", end="")
             with zipfile.ZipFile(target_file, "w", zipfile.ZIP_DEFLATED) as zipf:
                 zipf.write(source_file, file)
@@ -54,7 +55,19 @@ def cmd_build():
     zip_every_file_individually(_src_lambda_dir, _bin_lambda_dir)
 
 def cmd_upload():
-    pass
+    upload_dir_to_s3(_bin_lambda_dir, _shmenkins_bucket, _bin_lambda_dir)
+    
+def upload_dir_to_s3(path, bucket, target_dir):
+    s3 = boto3.resource("s3")
+    for root, dirs, files in os.walk(path):
+        for file in files:
+            source_file = os.path.join(root, file)
+            target_file = os.path.join(target_dir, file)
+            log(source_file + " -> ", end="")
+            with open(source_file) as f:
+                response = s3.Object(bucket, target_file).put(Body=f)
+                log(target_file + ":" + response.get("VersionId"))
+                
 
 def cmd_plan_deploy():
     pass
@@ -78,6 +91,8 @@ def log(message, end="\n"):
 _src_lambda_dir = "src/lambda"
 _bin_dir = "bin"
 _bin_lambda_dir = _bin_dir + "/lambda"
+
+_shmenkins_bucket = "shmenkins"
 
 if __name__ == '__main__':
     main(docopt.docopt(__doc__))
