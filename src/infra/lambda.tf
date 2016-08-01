@@ -49,7 +49,7 @@ resource "aws_lambda_permission" "rule_every_minute_triggers_poll_source_code_re
 
 resource "aws_lambda_function" "poll_source_code_repos" {
     s3_bucket = "${var.s3_bucket}"
-    s3_key = "lambda.zip"
+    s3_key = "bin/lambda/poll_source_code_repos.py.zip"
     s3_object_version = "${var.s3_object_version_id_poll_source_code_repos_py_zip}"
     function_name = "poll_source_code_repos"
     role = "${aws_iam_role.shmenkins_lambda.arn}"

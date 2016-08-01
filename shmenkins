@@ -77,7 +77,9 @@ def cmd_plan_deploy():
     
 
 def cmd_do_deploy():
-    pass
+    switch_terraform_to_remote_config()
+    update_terraform_vars()
+    subprocess.check_call(["terraform", "apply", _src_infra_dir])
 
 
 def switch_terraform_to_remote_config():
