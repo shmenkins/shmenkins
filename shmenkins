@@ -90,11 +90,28 @@ def switch_terraform_to_remote_config():
 
 
 def update_terraform_vars():
-    pass
-    # load entire file
-    # for each variable
-        # get latest version
-        # update with latest version
+    backup_file = _tfvars_file + ".bak"
+    shutil.move(_tfvars_file, backup_file)
+    with open(backup_file) as infile, open(_tfvars_file, "w") as outfile:
+        for line in infile:
+            variable_prefix = "s3_object_version_id_"
+            updated_line = line
+            try:
+                if line.startswith(variable_prefix):
+                    file_name = line[len(variable_prefix):].split("=")[0]
+                    latest_version_id = get_latest_s3_object_version_id(file_name)
+                    updated_line = variable_prefix + file_name + "=\"" + latest_version_id + "\""
+                    log(updated_line)
+            except:
+                updated_line = line
+            outfile.write(updated_line)
+    
+
+def get_latest_s3_object_version_id(file_name):
+    actual_file_name = file_name.replace("_py_zip", ".py.zip")
+    s3 = boto3.resource("s3")
+    s3_key = os.path.join(_bin_lambda_dir, actual_file_name)
+    return s3.Object(_shmenkins_bucket, s3_key).version_id
     
     
 def remove_directory(path):
