@@ -16,6 +16,7 @@ import boto3
 import docopt
 import os
 import shutil
+import subprocess
 import zipfile
 
 
@@ -70,12 +71,32 @@ def upload_dir_to_s3(path, bucket, target_dir):
                 
 
 def cmd_plan_deploy():
-    pass
+    switch_terraform_to_remote_config()
+    update_terraform_vars()
+    subprocess.check_call(["terraform", "plan", _src_infra_dir])
+    
 
 def cmd_do_deploy():
     pass
 
 
+def switch_terraform_to_remote_config():
+    if not os.path.isdir(".terraform"):
+        subprocess.check_call(["terraform", "remote", "config",
+                               "-backend=s3",
+                               "-backend-config=bucket=" + _shmenkins_bucket,
+                               "-backend-config=key=terraform.tfstate",
+                               "-backend-config=region=" + _aws_region])
+
+
+def update_terraform_vars():
+    pass
+    # load entire file
+    # for each variable
+        # get latest version
+        # update with latest version
+    
+    
 def remove_directory(path):
     if os.path.isdir(path):
         shutil.rmtree(path)
@@ -89,10 +110,15 @@ def log(message, end="\n"):
     print(message, end=end)
 
 _src_lambda_dir = "src/lambda"
+_src_infra_dir = "src/infra"
+
 _bin_dir = "bin"
 _bin_lambda_dir = _bin_dir + "/lambda"
 
 _shmenkins_bucket = "shmenkins"
+_aws_region = "us-east-1"
+
+_tfvars_file = "terraform.tfvars"
 
 if __name__ == '__main__':
     main(docopt.docopt(__doc__))
