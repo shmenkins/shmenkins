@@ -1,0 +1,108 @@
+#!/usr/bin/env python
+"""
+Usage: rest-api ensure [--swagger-file=<swagger_file> | --help]
+
+Commands:
+    ensure                            ensure AWS API Gateway REST API is in sync with the swagger definition provided
+    
+Options:
+    --swagger-file=<swagger_file>     swagger file, default is '-' (stdin)
+    --help                            show this help message
+
+rest-api is an AWS API Gateway management tool.
+rest-api looks for a REST API in AWS API Gateway with a name matching info.title from the swagger file. If the REST API is found then it is overwritten, if not found then a new REST API is created. Nothing is updated if there is no changes between the swagger file and the deployed api.
+rest-api puts md5 sum of the swagger file into the info.description field. This value is used later to check if update is required.
+"""
+
+from __future__ import print_function
+
+import boto3
+import docopt
+import json
+import sys
+import yaml
+import hashlib
+
+def main(args):
+
+    swagger_file_content = load_swagger_file(args.get("--swagger-file"))
+    rest_api_title = get_rest_api_title(swagger_file_content)
+    api_gateway = boto3.client('apigateway')
+    rest_api = get_rest_api(rest_api_title, api_gateway)
+    rest_api_id = ensure_rest_api(rest_api, swagger_file_content, api_gateway)
+    if rest_api_id:
+        api_gateway.create_deployment(restApiId=rest_api_id, stageName="prod")
+        print("Ensured rest api " + rest_api_title)
+        
+
+
+
+def load_swagger_file(swagger_file_name):
+    if swagger_file_name:
+        with open(swagger_file_name) as f:
+            return f.read()
+    else:
+        with sys.stdin as f:
+            return f.read()
+
+
+def get_rest_api_title(swagger_file_content):
+    return yaml.load(swagger_file_content)["info"]["title"]
+
+
+def get_rest_api(rest_api_title, api_gateway):
+    for api in api_gateway.get_rest_apis()["items"]:
+        if api["name"] == rest_api_title:
+            return api
+    return None
+
+
+def ensure_rest_api(rest_api, swagger_file_content, api_gateway):
+    swagger_file_md5 = hashlib.md5(swagger_file_content).hexdigest()
+    rest_api_id = None
+    if rest_api:
+        if rest_api.get("description") == swagger_file_md5:
+            print("Already up to date")
+        else:
+            rest_api_id = rest_api["id"]
+            update_rest_api(rest_api_id, swagger_file_content, api_gateway)
+    else:
+        rest_api_id = create_rest_api(swagger_file_content, api_gateway)
+        
+    return rest_api_id
+    
+    
+
+def update_rest_api(rest_api_id, swagger_file_content, api_gateway):
+    api_gateway.put_rest_api(restApiId=rest_api_id,
+        mode="overwrite",
+        failOnWarnings=True,
+        parameters={ "extensions" : "integrations"},
+        body=insert_md5(swagger_file_content))
+
+
+def insert_md5(swagger_file_content):
+    description = hashlib.md5(swagger_file_content).hexdigest()
+    return insert_description(swagger_file_content, description)
+
+
+def insert_description(swagger_file_content, description):
+    new_content = ""
+    for line in swagger_file_content.splitlines():
+        new_content += line + "\n"
+        if line.strip().startswith("title:"):
+            indent = line[:line.index("t")]
+            new_content += indent + "description: \"" + description + "\"\n"
+    return new_content
+    
+
+def create_rest_api(swagger_file_content, api_gateway):
+    return api_gateway.import_rest_api(failOnWarnings=True,
+        parameters={ "extensions" : "integrations"},
+        body=insert_md5(swagger_file_content))["id"]
+
+
+if __name__ == '__main__':
+    args = docopt.docopt(__doc__, version="1.0")
+    main(args)
+#     api_id = args.get("--api-id")

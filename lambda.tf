@@ -1,5 +1,5 @@
 variable "s3_bucket" {}
-variable "s3_object_version_id_poll_source_code_repos_py_zip" {}
+variable "lambda_zip_version" {}
 
 resource "aws_iam_role" "shmenkins_lambda" {
     name = "shmenkins_lambda"
@@ -30,7 +30,8 @@ resource "aws_iam_role_policy" "shmenkins_lambda" {
         "Statement": [
             {
                 "Action": [
-                    "logs:*"
+                    "logs:*",
+                    "s3:*"
                 ],
                 "Effect": "Allow",
                 "Resource": "*"
@@ -40,19 +41,20 @@ resource "aws_iam_role_policy" "shmenkins_lambda" {
 EOF
 }
 
-resource "aws_lambda_permission" "rule_every_minute_triggers_poll_source_code_repos" {
-    statement_id = "AllowExecutionFromCloudWatch"
-    action = "lambda:InvokeFunction"
-    function_name = "${aws_lambda_function.poll_source_code_repos.arn}"
-    principal = "events.amazonaws.com"
+resource "aws_lambda_function" "handle_webhook" {
+    s3_bucket = "${var.s3_bucket}"
+    s3_key = "lambda.zip"
+    s3_object_version = "${var.lambda_zip_version}"
+    function_name = "handle_webhook"
+    role = "${aws_iam_role.shmenkins_lambda.arn}"
+    handler = "shmenkins/handle_webhook.handle"
+    runtime = "python2.7"
 }
 
-resource "aws_lambda_function" "poll_source_code_repos" {
-    s3_bucket = "${var.s3_bucket}"
-    s3_key = "bin/lambda/poll_source_code_repos.py.zip"
-    s3_object_version = "${var.s3_object_version_id_poll_source_code_repos_py_zip}"
-    function_name = "poll_source_code_repos"
-    role = "${aws_iam_role.shmenkins_lambda.arn}"
-    handler = "poll_source_code_repos.lambda_handler"
-    runtime = "python2.7"
+resource "aws_lambda_permission" "allow_api_gateway_to_invoke_handle_webhook_lambda" {
+    function_name = "${aws_lambda_function.handle_webhook.function_name}"
+    statement_id = "AllowExecutionFromApiGateway"
+    action = "lambda:InvokeFunction"
+    principal = "apigateway.amazonaws.com"
+    source_arn = "arn:aws:execute-api:${var.aws_region}:${var.aws_account_id}:*/*/*/*"
 }

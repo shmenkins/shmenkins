@@ -1,6 +1,5 @@
-aws_access_key="<your_aws_access_key>"
-aws_secret_key="<your_aws_secret_key>"
+aws_credentials="<path_to_aws_credentials_file>"
 aws_account_id="<your_aws_account_id>"
 aws_region="<region>"
 s3_bucket="<shmenkins_bucket>"
-s3_object_version_id_poll_source_code_repos_py_zip="<leave_blank>"
+lambda_zip_version="<lambda_zip_version>"
