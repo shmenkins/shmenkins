@@ -1,5 +1,27 @@
 # shmenkins
 
+## Initial setup
+
+```
+cd util
+sudo ./install
+```
+
+## How to build individual service
+
+```
+cd service/<service_name>
+metaconfig terraform.tfvars
+```
+This will generate `terraform.tfvars` in the current directory.
+
+Deploy to AWS
+```
+terraform get
+terraform plan
+terraform apply
+```
+
 ## How To Build
 ### Prerequisites
 Create `terraform.tfvars` in project root.
