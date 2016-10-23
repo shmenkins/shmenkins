@@ -1,0 +1,15 @@
+echo -n "Enter AWS profile: "
+read aws_profile
+
+aws_account="$(aws ec2 describe-security-groups --group-names 'Default' --query 'SecurityGroups[0].OwnerId' --output text --profile $aws_profile)"
+
+aws_region="$(aws configure get region)"
+
+echo -n "Enter AWS resource prefix: "
+read aws_resource_prefix
+
+echo -n "Enter s3 bucket for tfstate: "
+read tfstate_bucket
+
+echo -n "Enter s3 key for tfstate: "
+read tfstate_key

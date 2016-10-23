@@ -1,9 +1,13 @@
 # general
 .*
+*~
+*.backup
 
 # terraform
 terraform.tfvars
 terraform.tfvars.bak
+terraform.tfstate
+
 
 # binaries
 bin
