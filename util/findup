@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+set -eo pipefail
+
+if [ "$1" == "-h" ]; then
+    echo "Finds a file going up the directory tree."
+    echo "Usage: findup myfile"
+    exit 0
+fi
+
+file="$1"
+path="$PWD"
+while [[ "$path" != "/" ]]; do
+    find "$path"  -maxdepth 1 -mindepth 1 -iname "$file"
+    # Note: if you want to ignore symlinks, use "$(realpath -s $path/..)"
+    path="$(readlink -f $path/..)"
+done
