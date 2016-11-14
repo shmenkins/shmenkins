@@ -2,7 +2,6 @@
 
 set -eo pipefail
 
-rm -f terraform.tfvars
-cfgen terraform.tfvars
-terraform get
+./init.sh
+
 terraform destroy -force
