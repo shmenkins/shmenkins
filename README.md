@@ -2,58 +2,44 @@
 
 ## Initial setup
 
-```
-cd util
-sudo ./install
-```
+Run `$ sudo ./setup.sh` to install the build tools (`cfgen`, `awscli`, `terraform`).
+Create a versioned S3 bucket in the same region where lambda will be.
 
 ## How to build individual service
 
 ```
-cd service/<service_name>
-metaconfig terraform.tfvars
-```
-This will generate `terraform.tfvars` in the current directory.
-
-Deploy to AWS
-```
-terraform get
-terraform plan
-terraform apply
-```
-
-## How To Build
-### Prerequisites
-Create `terraform.tfvars` in project root.
-```
-aws_access_key="<your_aws_access_key>"
-aws_secret_key="<your_aws_secret_key>"
-aws_account_id="<your_aws_account_id>"
-aws_region="<aws_region>"
-s3_bucket="<aws_s3_bucket>"
-```
-
-```
-$ ./shmenkins build
-```
-Will build lambda.
-
-## How To Deploy
-
-```
-$ ./shmenkins upload
-$ ./shmenkins plan-deploy
-$ ./shmenkins do-deploy
+$ cd infra/<resource_group>
+$ ./init.sh
+$ terraform apply
 ```
 
 ## Directory Layout
 
 Directory | Description
 ----------|----------------
-src/lambda | Lambda source code (python)
-src/infra | Infrastructure source code (terraform)
-src/util | Various utilities (bash, python)
+lambda | Lambda source code (python)
+infra | Infrastructure source code (terraform)
+util | Various utilities (bash, python)
 cfg | Configuration files
 
 ## AWS resources
-Single S3 bucket for everything. `/prefix/service_name` directory for all service related stuff. Inside it `terraform.tfstate`, `lambda/lambda-function-1.zip`.
+Single S3 bucket for everything.
+
+S3 bucket directory layout
+```
+s3_bucket
+├── branch_1
+│   └── group_1
+│       ├── lambda_function_1.whl
+│       ├── terraform.tfstate
+│       └── other_dependencies
+└── master
+    ├── group_1
+    │   ├── lambda_function_1.whl
+    │   ├── terraform.tfstate
+    │   └── other_dependencies
+    └── group_2
+        ├── lambda_function_2.whl
+        ├── terraform.tfstate
+        └── other_dependencies
+```
