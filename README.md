@@ -54,3 +54,6 @@ src/lambda | Lambda source code (python)
 src/infra | Infrastructure source code (terraform)
 src/util | Various utilities (bash, python)
 cfg | Configuration files
+
+## AWS resources
+Single S3 bucket for everything. `/prefix/service_name` directory for all service related stuff. Inside it `terraform.tfstate`, `lambda/lambda-function-1.zip`.
