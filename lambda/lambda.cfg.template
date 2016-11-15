@@ -1,0 +1,2 @@
+s3_bucket="{{ s3_bucket }}"
+aws_resource_prefix="{{ aws_resource_prefix }}"

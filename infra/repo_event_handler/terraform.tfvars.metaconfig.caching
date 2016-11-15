@@ -1,5 +1,2 @@
 aws_profile
-aws_account
-aws_region
-aws_resource_prefix
 s3_bucket

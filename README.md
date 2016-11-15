@@ -22,6 +22,8 @@ infra | Infrastructure source code (terraform)
 util | Various utilities (bash, python)
 cfg | Configuration files
 
+All lambda functions are packaged into a single wheel. With minimal cold lambda penalty we don't need to worry about separating them yet.
+
 ## AWS resources
 Single S3 bucket for everything.
 
@@ -29,17 +31,16 @@ S3 bucket directory layout
 ```
 s3_bucket
 ├── branch_1
+│   ├── lambda.whl
 │   └── group_1
-│       ├── lambda_function_1.whl
 │       ├── terraform.tfstate
 │       └── other_dependencies
 └── master
+    ├── lambda.whl
     ├── group_1
-    │   ├── lambda_function_1.whl
     │   ├── terraform.tfstate
     │   └── other_dependencies
     └── group_2
-        ├── lambda_function_2.whl
         ├── terraform.tfstate
         └── other_dependencies
 ```

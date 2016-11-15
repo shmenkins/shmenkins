@@ -14,3 +14,9 @@ bin
 
 # cfgen
 *.metaconfig.cache
+
+# python
+venv*
+build/
+dist/
+*.egg-info/
