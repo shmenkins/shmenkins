@@ -6,5 +6,7 @@ set -eo pipefail
 
 source venv/bin/activate
 
+./clean.sh
+
 nosetests
 python setup.py bdist_wheel
