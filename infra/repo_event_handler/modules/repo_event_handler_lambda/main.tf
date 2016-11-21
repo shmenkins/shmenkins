@@ -48,7 +48,7 @@ EOF
 
 resource "aws_lambda_function" "lambda" {
     function_name = "${var.aws_resource_prefix}_${var.function_name}"
-    handler = "lambda/${var.function_name}.handle_request"
+    handler = "aws_lambda/${var.function_name}.handle_request"
     s3_bucket = "${var.s3_bucket}"
     s3_key = "${var.aws_resource_prefix}/${var.lambda_wheel_filename}"
     s3_object_version = "${var.lambda_wheel_s3_version}"
