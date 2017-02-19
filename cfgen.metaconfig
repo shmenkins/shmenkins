@@ -3,8 +3,6 @@
 aws_profile=/bin/bash -c 'read -p "Enter AWS profile: " aws_profile && echo $aws_profile'
 aws_account=echo $(aws ec2 describe-security-groups --group-names 'Default' --query 'SecurityGroups[0].OwnerId' --output text --profile $aws_profile)
 aws_region=echo $(aws configure get region)
-aws_resource_prefix=git rev-parse --abbrev-ref HEAD
 s3_bucket=/bin/bash -c 'read -p "Enter existing s3 bucket for tfstate, lambda functions, etc: " s3_bucket && echo $s3_bucket'
-lambda_wheel_filename=echo lambda-0.0.1-py2-none-any.whl
 # version is returned double qouted, tr removes all qoutes, hope there is no double qoutes inside...
-lambda_wheel_s3_version=aws s3api head-object --bucket ${s3_bucket} --key ${aws_resource_prefix}/${lambda_wheel_filename} --output=json --query="VersionId" | tr -d '"' 
+webhook_handler_version=aws s3api head-object --bucket "${s3_bucket}" --key "artifacts/WebhookHandler.jar" --output=json --query="VersionId" | tr -d '"' 

@@ -1,4 +1,0 @@
-# vim: ft=sh
-
-aws_resource_prefix=git rev-parse --abbrev-ref HEAD
-s3_bucket=/bin/bash -c 'read -p "Enter existing s3 bucket for tfstate, lambda functions, etc: " s3_bucket && echo $s3_bucket'

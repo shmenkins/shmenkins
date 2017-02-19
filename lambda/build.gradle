@@ -1,0 +1,48 @@
+plugins {
+  id "com.github.mgk.gradle.s3" version "1.4.0"
+}
+
+subprojects {
+  apply plugin: "java"
+  apply plugin: "eclipse"
+  apply plugin: "idea"
+
+  sourceCompatibility = 1.8
+
+  repositories {
+    mavenCentral()
+  }
+
+  dependencies {
+    testCompile "org.testng:testng:6.10",
+                "org.assertj:assertj-core:3.6.2"
+  }
+
+  tasks.withType(Test) {
+    useTestNG()
+    reports.html.destination = file("${reporting.baseDir}/${name}")
+  }
+
+  task buildJar(type: Jar) {
+    from compileJava
+    from processResources
+    into("lib") {
+        from configurations.runtime
+    }
+
+    manifest {
+      attributes("Class-Path": "lib/*.jar")
+    }
+  }
+  
+  s3 {
+    profile = "${awsProfile}"
+  }    
+  
+  task publish(type: com.github.mgk.gradle.S3Upload, dependsOn: buildJar) {
+    file = "${jar.archivePath}"
+    bucket = "${s3Bucket}"
+    key = "artifacts/${jar.archiveName}"
+    overwrite = true
+  }
+}

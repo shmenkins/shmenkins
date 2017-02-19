@@ -1,7 +1,7 @@
+# this file is read by terraform and sourced by bash, keep it compatible
+
 aws_profile="{{ aws_profile }}"
 aws_account="{{ aws_account }}"
 aws_region="{{ aws_region }}"
-aws_resource_prefix="{{ aws_resource_prefix }}"
 s3_bucket="{{ s3_bucket }}"
-lambda_wheel_filename="{{ lambda_wheel_filename }}"
-lambda_wheel_s3_version="{{ lambda_wheel_s3_version }}"
+webhook_handler_version="{{ webhook_handler_version }}"
