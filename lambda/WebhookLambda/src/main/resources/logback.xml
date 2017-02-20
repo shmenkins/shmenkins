@@ -17,7 +17,7 @@
             <timeStampFormat>yyyy-MM-dd'T'HH:mm:ss.SSS</timeStampFormat> </encoder> -->
     </appender>
 
-    <root level="debug">
+    <root level="DEBUG">
         <appender-ref ref="CW" />
     </root>
     
