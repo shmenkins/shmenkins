@@ -5,7 +5,9 @@ variable "s3_object_version" {}
 variable "globals" { type = "map" }
 
 variable "memory_size" { default = 512 }
+variable "timeout" { default = 5 }
 variable "log_retention_in_days" { default = 30 }
+variable "env_vars" { type = "map" }
 
 
 resource "aws_lambda_function" "lambda" {
@@ -15,8 +17,12 @@ resource "aws_lambda_function" "lambda" {
     s3_key = "artifacts/${var.name}.jar"
     s3_object_version = "${var.s3_object_version}"
     runtime = "java8"
+    timeout = "${var.timeout}"
     memory_size = "${var.memory_size}"
     role = "${aws_iam_role.lambda.arn}"
+    environment {
+      variables = "${merge(map("AWS_ACCOUNT", "${var.globals["account"]}"), "${var.env_vars}")}"
+    }
     # create lg first, then lambda
     # remove lambda first then lg
     depends_on = ["aws_cloudwatch_log_group.lambda"]

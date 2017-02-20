@@ -21,6 +21,9 @@ module "webhook_handler_lambda" {
     name = "WebhookLambda"
     s3_object_version = "${var.webhook_handler_version}"
     globals = "${var.globals}"
+    env_vars = {
+        TOPIC_NAME = "${aws_sns_topic.repo_update.name}"
+    }
 }
 
 resource "aws_api_gateway_rest_api" "webhook" {
