@@ -14,8 +14,14 @@ subprojects {
   }
 
   dependencies {
+    compile     "org.slf4j:slf4j-api:1.7.23"
+    runtime     "co.wrisk.logback:logback-ext-cloudwatch-appender:1.0.3"
+    
     testCompile "org.testng:testng:6.10",
-                "org.assertj:assertj-core:3.6.2"
+                "org.assertj:assertj-core:3.6.2",
+                "org.mockito:mockito-core:2.7.9"
+                
+    testRuntime "ch.qos.logback:logback-classic:1.2.1"
   }
 
   tasks.withType(Test) {

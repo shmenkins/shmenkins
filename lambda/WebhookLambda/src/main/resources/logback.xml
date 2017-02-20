@@ -1,0 +1,19 @@
+<configuration>
+
+    <appender name="CW" class="org.eluder.logback.ext.cloudwatch.appender.CloudWatchAppender">
+        <!-- see http://docs.aws.amazon.com/lambda/latest/dg/current-supported-versions.html -->
+        <region>${AWS_REGION}</region>
+        <logGroup>${AWS_LAMBDA_LOG_GROUP_NAME}</logGroup>
+        <logStream>${AWS_LAMBDA_LOG_STREAM_NAME}</logStream>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} %X{lambdaInstanceId} [%thread] %-5level %logger{36} %msg%n</pattern>
+        </encoder>
+        <!-- <encoder class="org.eluder.logback.ext.jackson.JacksonEncoder"> 
+            <timeStampFormat>yyyy-MM-dd'T'HH:mm:ss.SSS</timeStampFormat> </encoder> -->
+    </appender>
+
+    <root level="debug">
+        <appender-ref ref="CW" />
+    </root>
+    
+</configuration>

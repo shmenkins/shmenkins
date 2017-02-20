@@ -1,4 +1,4 @@
-# Lambda function that logs to CloudWatch
+# Lambda function thateclipse logs to CloudWatch
 
 variable "name" {}
 variable "s3_object_version" {}
@@ -77,4 +77,5 @@ EOF
 
 output "function_arn" { value = "${aws_lambda_function.lambda.arn}" }
 output "log_group_arn" { value = "${aws_cloudwatch_log_group.lambda.arn}" }
+output "role_id" { value = "${aws_iam_role.lambda.id}" }
 output "role_arn" { value = "${aws_iam_role.lambda.arn}" }

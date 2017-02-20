@@ -12,6 +12,7 @@ terraform.tfstate
 
 # eclipse
 bin
+test-output
 
 # idea
 *.iml
