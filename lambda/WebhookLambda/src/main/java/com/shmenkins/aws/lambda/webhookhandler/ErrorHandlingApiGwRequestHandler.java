@@ -19,7 +19,7 @@ public class ErrorHandlingApiGwRequestHandler<O> implements ApiGwReqeustHandler<
 			return target.handle(request);
 		} catch (Throwable e) {
 			log.error("Cannot handle apigw request; request=" + request, e);
-			throw new RuntimeException("500");
+			throw new RuntimeException("500", e);
 		}
 	}
 
