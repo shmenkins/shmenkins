@@ -3,6 +3,7 @@ package com.shmenkins.aws.lambda.webhooklambda;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.amazonaws.regions.Regions;
 import com.amazonaws.services.sns.AmazonSNSClient;
 import com.shmenkins.aws.lambda.webhookhandler.ApiGwReqeustHandler;
 import com.shmenkins.aws.lambda.webhookhandler.ApiGwRequest;
@@ -30,7 +31,9 @@ public class WebhookLambda extends BasicLambda implements ApiGwReqeustHandler<Vo
 
 		// instantiation is allowed only here in lambda ctor
 		// this is like spring context
-		Sns sns = new Sns(new AmazonSNSClient(), region, account);
+		
+		// have to set region for sns client here, otherwise uses default one
+		Sns sns = new Sns(new AmazonSNSClient().withRegion(Regions.fromName(region)), region, account);
 
 		this.handler = new ErrorHandlingApiGwRequestHandler<>(new WebhookHandler(sns, topicName));
 
