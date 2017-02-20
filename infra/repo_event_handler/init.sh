@@ -2,8 +2,7 @@
 
 set -eo pipefail
 
-rm -f terraform.tfvars
-cfgen terraform.tfvars
+cfgen terraform.tfvars --overwrite
 
 source terraform.tfvars
 
