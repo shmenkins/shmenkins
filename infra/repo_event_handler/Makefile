@@ -1,4 +1,4 @@
-publish:
+deploy:
 	./build.sh
 
 clean:
