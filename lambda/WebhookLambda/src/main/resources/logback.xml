@@ -5,6 +5,11 @@
         <region>${AWS_REGION}</region>
         <logGroup>${AWS_LAMBDA_LOG_GROUP_NAME}</logGroup>
         <logStream>${AWS_LAMBDA_LOG_STREAM_NAME}</logStream>
+        <!--
+        the appender fetches all log groups to determine if the required one exists, this fails due to restricted permissions
+        also we manage log groups in terraform
+        -->
+        <skipCreate>true</skipCreate>
         <encoder>
             <pattern>%d{HH:mm:ss.SSS} %X{lambdaInstanceId} [%thread] %-5level %logger{36} %msg%n</pattern>
         </encoder>

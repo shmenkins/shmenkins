@@ -23,7 +23,6 @@ public class WebhookLambda extends BasicLambda implements ApiGwReqeustHandler<Vo
 	private final ApiGwReqeustHandler<Void> handler;
 
 	public WebhookLambda() {
-
 		// all dependencies (env variables) are explicit and in one place
 		String region = EnvUtils.getEnvOrFail("AWS_REGION");
 		String account = EnvUtils.getEnvOrFail("AWS_ACCOUNT");
