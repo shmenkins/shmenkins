@@ -5,9 +5,10 @@ import org.slf4j.LoggerFactory;
 
 import com.shmenkins.core.handler.BasicHandler;
 import com.shmenkins.core.handler.http.HttpRequest;
+import com.shmenkins.core.handler.http.HttpResponse;
 import com.shmenkins.core.infra.notification.MBus;
 
-public class WebhookHandler implements BasicHandler<HttpRequest, Void> {
+public class WebhookHandler implements BasicHandler<HttpRequest, HttpResponse> {
 
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
@@ -23,7 +24,7 @@ public class WebhookHandler implements BasicHandler<HttpRequest, Void> {
 	}
 
 	@Override
-	public Void handle(HttpRequest request) {
+	public HttpResponse handle(HttpRequest request) {
 
 		log.debug("Handling; topicName={}", topicName);
 
