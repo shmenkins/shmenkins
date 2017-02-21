@@ -1,7 +1,5 @@
 package com.shmenkins.infra.aws.lambda.webhooklambda;
 
-import java.util.LinkedHashMap;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,11 +41,6 @@ public class WebhookLambda extends BasicLambda<HttpRequest, Void> {
 		log.info("Instantiated; region={}, account={}, topicName={}", region, account, topicName);
 
 		return handler;
-	}
-	
-	
-	public static void main(String[] args) {
-		HttpRequest r = (HttpRequest)new LinkedHashMap<>();
 	}
 
 }
