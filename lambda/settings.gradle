@@ -1,3 +1,6 @@
 rootProject.name = "lambda"
 
+include "core"
+include "infra-aws"
+include "webhook-handler"
 include "WebhookLambda"
