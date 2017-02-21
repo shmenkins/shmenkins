@@ -12,7 +12,7 @@ variable "env_vars" { type = "map" }
 
 resource "aws_lambda_function" "lambda" {
     function_name = "${var.name}"
-    handler = "com.shmenkins.aws.lambda.${lower(var.name)}.${var.name}::handle"
+    handler = "com.shmenkins.infra.aws.lambda.${lower(var.name)}.${var.name}::handle"
     s3_bucket = "${var.globals["s3_bucket"]}"
     s3_key = "artifacts/${var.name}.jar"
     s3_object_version = "${var.s3_object_version}"
