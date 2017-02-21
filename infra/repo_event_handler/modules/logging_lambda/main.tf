@@ -1,7 +1,6 @@
-# Lambda function thateclipse logs to CloudWatch
+# Lambda function that logs to CloudWatch
 
 variable "name" {}
-variable "s3_object_version" {}
 variable "globals" { type = "map" }
 
 variable "memory_size" { default = 512 }
@@ -9,13 +8,17 @@ variable "timeout" { default = 5 }
 variable "log_retention_in_days" { default = 30 }
 variable "env_vars" { type = "map" }
 
+data "aws_s3_bucket_object" "lambda_file" {
+    bucket = "${var.globals["s3_bucket"]}"
+    key = "artifacts/${var.name}.jar"
+}
 
 resource "aws_lambda_function" "lambda" {
     function_name = "${var.name}"
     handler = "com.shmenkins.infra.aws.lambda.${lower(var.name)}.${var.name}::handle"
-    s3_bucket = "${var.globals["s3_bucket"]}"
-    s3_key = "artifacts/${var.name}.jar"
-    s3_object_version = "${var.s3_object_version}"
+    s3_bucket = "${data.aws_s3_bucket_object.lambda_file.bucket}"
+    s3_key = "${data.aws_s3_bucket_object.lambda_file.key}"
+    s3_object_version = "${data.aws_s3_bucket_object.lambda_file.version_id}"
     runtime = "java8"
     timeout = "${var.timeout}"
     memory_size = "${var.memory_size}"

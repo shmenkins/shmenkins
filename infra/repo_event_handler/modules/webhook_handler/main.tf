@@ -2,7 +2,6 @@
 # webhooks call the api, the lambda handles the request
 # and publishes a message to the topic
 
-variable "webhook_handler_version" {}
 variable "globals" { type = "map" }
 
 resource "aws_api_gateway_deployment" "webhook" {
@@ -19,7 +18,6 @@ resource "aws_api_gateway_deployment" "webhook" {
 module "webhook_handler_lambda" {
     source = "../logging_lambda"
     name = "WebhookLambda"
-    s3_object_version = "${var.webhook_handler_version}"
     globals = "${var.globals}"
     env_vars = {
         TOPIC_NAME = "${aws_sns_topic.repo_update.name}"

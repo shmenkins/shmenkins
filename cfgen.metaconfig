@@ -4,5 +4,3 @@ aws_profile=/bin/bash -c 'read -p "Enter AWS profile: " aws_profile && echo $aws
 aws_account=echo $(aws ec2 describe-security-groups --group-names 'Default' --query 'SecurityGroups[0].OwnerId' --output text --profile $aws_profile)
 aws_region=echo $(aws configure get region)
 s3_bucket=/bin/bash -c 'read -p "Enter existing s3 bucket for tfstate, lambda functions, etc: " s3_bucket && echo $s3_bucket'
-# version is returned double qouted, tr removes all qoutes, hope there is no double qoutes inside...
-webhook_handler_version=/bin/bash -e -o pipefail -c "aws s3api head-object --bucket '${s3_bucket}' --key 'artifacts/WebhookLambda.jar' --output=json --query='VersionId' | tr -d '\"' "
