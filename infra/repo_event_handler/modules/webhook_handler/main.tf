@@ -43,7 +43,7 @@ resource "aws_lambda_permission" "allow_invocation_from_apigw" {
     statement_id = "allow_invocation_from_apigw"
     action = "lambda:InvokeFunction"
     principal = "apigateway.amazonaws.com"
-    source_arn = "arn:aws:execute-api:${var.globals["region"]}:${var.globals["account"]}:*/*/*/*"
+    source_arn = "arn:aws:execute-api:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:*/*/*/*"
 }
 
 resource "aws_sns_topic" "repo_update" {
@@ -68,5 +68,9 @@ resource "aws_iam_role_policy" "allow_sns_publish" {
 }
 EOF
 }
+
+data "aws_region" "current" { current = true }
+
+data "aws_caller_identity" "current" { }
 
 output "topic_arn" { value = "${aws_sns_topic.repo_update.arn}" }

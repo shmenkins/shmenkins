@@ -24,7 +24,7 @@ resource "aws_api_gateway_integration" "integration" {
   http_method = "${aws_api_gateway_method.method.http_method}"
   type = "AWS"
   integration_http_method = "POST"
-  uri = "arn:aws:apigateway:${var.globals["region"]}:lambda:path/2015-03-31/functions/arn:aws:lambda:${var.globals["region"]}:${var.globals["account"]}:function:${var.function}/invocations"
+  uri = "arn:aws:apigateway:${data.aws_region.current.name}:lambda:path/2015-03-31/functions/arn:aws:lambda:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:function:${var.function}/invocations"
 }
 
 resource "aws_api_gateway_method_response" "200" {
@@ -42,5 +42,9 @@ resource "aws_api_gateway_integration_response" "integration_response" {
   depends_on = ["aws_api_gateway_integration.integration"]
 }
 
-output "method_arn" { value = "arn:aws:execute-api:${var.globals["region"]}:${var.globals["account"]}:${var.rest_api_id}/*/${var.http_method}/${var.path_part}" }
+data "aws_region" "current" { current = true }
+
+data "aws_caller_identity" "current" {}
+
+output "method_arn" { value = "arn:aws:execute-api:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:${var.rest_api_id}/*/${var.http_method}/${var.path_part}" }
 

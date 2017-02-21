@@ -24,7 +24,7 @@ resource "aws_lambda_function" "lambda" {
     memory_size = "${var.memory_size}"
     role = "${aws_iam_role.lambda.arn}"
     environment {
-      variables = "${merge(map("AWS_ACCOUNT", "${var.globals["account"]}"), "${var.env_vars}")}"
+      variables = "${merge(map("AWS_ACCOUNT", "${data.aws_caller_identity.current.account_id}"), "${var.env_vars}")}"
     }
     # create lg first, then lambda
     # remove lambda first then lg
@@ -68,7 +68,7 @@ resource "aws_iam_role_policy" "lambda" {
                   "logs:DescribeLogGroups"
                 ],
                 "Effect": "Allow",
-                "Resource": "arn:aws:logs:${var.globals["region"]}:${var.globals["account"]}:log-group:/aws/lambda/${var.name}"
+                "Resource": "arn:aws:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:log-group:/aws/lambda/${var.name}"
             },
             {
                 "Action": [
@@ -77,12 +77,16 @@ resource "aws_iam_role_policy" "lambda" {
                   "logs:PutLogEvents"
                 ],
                 "Effect": "Allow",
-                "Resource": "arn:aws:logs:${var.globals["region"]}:${var.globals["account"]}:log-group:/aws/lambda/${var.name}:log-stream:*"
+                "Resource": "arn:aws:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:log-group:/aws/lambda/${var.name}:log-stream:*"
             }
         ]
 }
 EOF
 }
+
+data "aws_region" "current" { current = true }
+
+data "aws_caller_identity" "current" {}
 
 output "function_arn" { value = "${aws_lambda_function.lambda.arn}" }
 output "log_group_arn" { value = "${aws_cloudwatch_log_group.lambda.arn}" }
