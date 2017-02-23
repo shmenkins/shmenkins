@@ -3,7 +3,6 @@ variable "parent_id" {}
 variable "path_part" {}
 variable "http_method" {}
 variable "function" {}
-variable "globals" { type = "map" }
 
 resource "aws_api_gateway_resource" "resource" {
   rest_api_id = "${var.rest_api_id}"

@@ -2,7 +2,7 @@
 # webhooks call the api, the lambda handles the request
 # and publishes a message to the topic
 
-variable "globals" { type = "map" }
+variable "s3_bucket" {}
 
 resource "aws_api_gateway_deployment" "webhook" {
   # change this to redeploy
@@ -18,7 +18,7 @@ resource "aws_api_gateway_deployment" "webhook" {
 module "webhook_handler_lambda" {
   source = "../logging_lambda"
   name = "WebhookLambda"
-  globals = "${var.globals}"
+  s3_bucket = "${var.s3_bucket}"
   env_vars = {
     TOPIC_NAME = "${aws_sns_topic.repo_update.name}"
   }
@@ -35,7 +35,6 @@ module "events_post" {
   path_part = "events"
   http_method = "POST"
   function = "${module.webhook_handler_lambda.function_name}"
-  globals = "${var.globals}"
 }
 
 resource "aws_lambda_permission" "allow_invocation_from_apigw" {
