@@ -89,6 +89,7 @@ data "aws_region" "current" { current = true }
 data "aws_caller_identity" "current" {}
 
 output "function_arn" { value = "${aws_lambda_function.lambda.arn}" }
+output "function_name" { value = "${aws_lambda_function.lambda.function_name}" }
 output "log_group_arn" { value = "${aws_cloudwatch_log_group.lambda.arn}" }
 output "role_id" { value = "${aws_iam_role.lambda.id}" }
 output "role_arn" { value = "${aws_iam_role.lambda.arn}" }

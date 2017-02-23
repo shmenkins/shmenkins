@@ -16,12 +16,12 @@ resource "aws_api_gateway_deployment" "webhook" {
 }
 
 module "webhook_handler_lambda" {
-    source = "../logging_lambda"
-    name = "WebhookLambda"
-    globals = "${var.globals}"
-    env_vars = {
-        TOPIC_NAME = "${aws_sns_topic.repo_update.name}"
-    }
+  source = "../logging_lambda"
+  name = "WebhookLambda"
+  globals = "${var.globals}"
+  env_vars = {
+    TOPIC_NAME = "${aws_sns_topic.repo_update.name}"
+  }
 }
 
 resource "aws_api_gateway_rest_api" "webhook" {
@@ -34,16 +34,16 @@ module "events_post" {
   parent_id = "${aws_api_gateway_rest_api.webhook.root_resource_id}"
   path_part = "events"
   http_method = "POST"
-  function = "WebhookHandler"
+  function = "${module.webhook_handler_lambda.function_name}"
   globals = "${var.globals}"
 }
 
 resource "aws_lambda_permission" "allow_invocation_from_apigw" {
-    function_name = "${module.webhook_handler_lambda.function_arn}"
-    statement_id = "allow_invocation_from_apigw"
-    action = "lambda:InvokeFunction"
-    principal = "apigateway.amazonaws.com"
-    source_arn = "arn:aws:execute-api:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:*/*/*/*"
+  function_name = "${module.webhook_handler_lambda.function_name}"
+  statement_id = "allow_invocation_from_apigw"
+  action = "lambda:InvokeFunction"
+  principal = "apigateway.amazonaws.com"
+  source_arn = "${module.events_post.method_arn}"
 }
 
 resource "aws_sns_topic" "repo_update" {
@@ -55,16 +55,16 @@ resource "aws_iam_role_policy" "allow_sns_publish" {
   role = "${module.webhook_handler_lambda.role_id}"
   policy = <<EOF
 {
-        "Version": "2012-10-17",
-        "Statement": [
-            {
-                "Action": [
-                    "sns:Publish"
-                ],
-                "Effect": "Allow",
-                "Resource": "${aws_sns_topic.repo_update.arn}"
-            }
-        ]
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Action": [
+          "sns:Publish"
+        ],
+        "Effect": "Allow",
+        "Resource": "${aws_sns_topic.repo_update.arn}"
+      }
+    ]
 }
 EOF
 }
