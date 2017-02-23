@@ -10,6 +10,7 @@
         also we manage log groups in terraform
         -->
         <skipCreate>true</skipCreate>
+        <maxBatchTime>100</maxBatchTime>
         <encoder>
             <pattern>%d{HH:mm:ss.SSS} %X{lambdaInstanceId} [%thread] %-5level %logger{36} %msg%n</pattern>
         </encoder>
