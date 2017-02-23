@@ -44,6 +44,7 @@ public abstract class ApiGwLambda {
 	}
 
 	private HttpRequest apiGwToHttpRequest(Map<Object, Object> apiGwRequest) {
+		log.trace("ApiGwRequest={}", apiGwRequest);
 		return new HttpRequest();
 	}
 

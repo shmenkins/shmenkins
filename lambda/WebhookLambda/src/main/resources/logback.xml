@@ -17,8 +17,10 @@
             <timeStampFormat>yyyy-MM-dd'T'HH:mm:ss.SSS</timeStampFormat> </encoder> -->
     </appender>
 
-    <root level="DEBUG">
+    <root level="WARN">
         <appender-ref ref="CW" />
     </root>
+    
+    <logger name="com.shmenkins" level="TRACE" />
     
 </configuration>
