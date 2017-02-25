@@ -14,16 +14,17 @@ import com.shmenkins.core.handler.http.HttpResponse;
 
 public abstract class ApiGwLambda {
 
+	static {
+		// all logs from this instance can be identified using this value
+		MDC.put("lambdaInstanceId", UUID.randomUUID().toString());
+	}
+
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
 	private final BasicHandler<HttpRequest, HttpResponse> handler;
 
 	protected ApiGwLambda(BasicHandler<HttpRequest, HttpResponse> handler) {
-		// all logs from this instance can be identified using this value
-		MDC.put("lambdaInstanceId", UUID.randomUUID().toString());
-
 		this.handler = handler;
-
 		log.info("Instantiated; handler={}", handler);
 	}
 
@@ -51,5 +52,5 @@ public abstract class ApiGwLambda {
 	private Map<Object, Object> httpToApiGwResponse(HttpResponse httpResponse) {
 		return Collections.emptyMap();
 	}
-
+	
 }
