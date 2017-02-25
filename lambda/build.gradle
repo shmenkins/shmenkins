@@ -32,7 +32,8 @@ subprojects {
 // Projects ending with "Lambda" are executable (deployable) projects.
 configure(subprojects.findAll { it.name.endsWith("Lambda") }) {
   dependencies {
-    runtime     "co.wrisk.logback:logback-ext-cloudwatch-appender:1.0.3"
+  runtime group: 'com.amazonaws', name: 'aws-lambda-java-log4j', version: '1.0.0'
+  runtime group: 'org.slf4j',     name: 'slf4j-log4j12',         version: '1.7.23'
   }
   
   task buildJar(type: Jar) {
