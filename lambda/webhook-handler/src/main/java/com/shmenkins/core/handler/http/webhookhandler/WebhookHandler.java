@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import com.shmenkins.core.handler.BasicHandler;
 import com.shmenkins.core.infra.notification.MBus;
+import com.shmenkins.core.util.MapParser;
 
 public class WebhookHandler implements BasicHandler<Map<Object, Object>, Void> {
 
@@ -28,32 +29,14 @@ public class WebhookHandler implements BasicHandler<Map<Object, Object>, Void> {
 
 		log.debug("Handling; topicName={}", topicName);
 
-		Json json = new Json(input);
+		MapParser json = new MapParser(input);
 		String repoUrl = json.get("body", "repository", "url");
 		String headCommit = json.get("body", "after");
-		log.debug("processing push; repoUrl={}, headCommit={}",repoUrl, headCommit);
+		log.debug("processing push; repoUrl={}, headCommit={}", repoUrl, headCommit);
 
 		mBus.publish(topicName, "my-message");
 
 		return null;
-	}
-
-	private static final class Json {
-		private final Map<?, ?> root;
-
-		public Json(Map<?, ?> obj) {
-			this.root = obj;
-		}
-
-		@SuppressWarnings("unchecked")
-		public <T> T get(String... path) {
-
-			Object v = root;
-			for (String pathElement : path) {
-				v = ((Map<?, ?>) v).get(pathElement);
-			}
-			return (T) v;
-		}
 	}
 
 }
