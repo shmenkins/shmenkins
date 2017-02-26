@@ -10,22 +10,14 @@ module "build_scheduler_lambda" {
   }
 }
 
-resource "aws_lambda_permission" "allow_invocation_from_sns" {
-  function_name = "${module.build_scheduler_lambda.function_name}"
-  statement_id = "allow_invocation_from_sns"
-  action = "lambda:InvokeFunction"
-  principal = "sns.amazonaws.com"
-  source_arn = "${var.repo_update_topic_arn}"
+module "schedule_bulid_on_repo_change_subscription" {
+  source = "../sns_to_lambda_subscription"
+  topic_arn = "${var.repo_update_topic_arn}"
+  function_arn = "${module.build_scheduler_lambda.function_arn}"
 }
 
 resource "aws_sns_topic" "build_scheduled" {
   name = "build_scheduled"
-}
-
-resource "aws_sns_topic_subscription" "schedule_bulid_on_repo_change" {
-    topic_arn = "${var.repo_update_topic_arn}"
-    protocol = "lambda"
-    endpoint = "${module.build_scheduler_lambda.function_arn}"
 }
 
 module "allow_sns_publish" {
