@@ -49,27 +49,14 @@ resource "aws_sns_topic" "repo_update" {
   name = "repo_update"
 }
 
-resource "aws_iam_role_policy" "allow_sns_publish" {
-  name = "allow_sns_publish"
-  role = "${module.webhook_handler_lambda.role_id}"
-  policy = <<EOF
-{
-    "Version": "2012-10-17",
-    "Statement": [
-      {
-        "Action": [
-          "sns:Publish"
-        ],
-        "Effect": "Allow",
-        "Resource": "${aws_sns_topic.repo_update.arn}"
-      }
-    ]
-}
-EOF
+module "allow_sns_publish" {
+  source = "../allow_sns_publish_policy"
+  role_id = "${module.webhook_handler_lambda.role_id}"
+  topic_arn = "${aws_sns_topic.repo_update.arn}"
 }
 
 data "aws_region" "current" { current = true }
 
 data "aws_caller_identity" "current" { }
 
-output "topic_arn" { value = "${aws_sns_topic.repo_update.arn}" }
+output "repo_update_topic_arn" { value = "${aws_sns_topic.repo_update.arn}" }
