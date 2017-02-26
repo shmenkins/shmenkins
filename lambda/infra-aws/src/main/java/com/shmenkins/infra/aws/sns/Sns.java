@@ -4,9 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.amazonaws.services.sns.AmazonSNSClient;
-import com.shmenkins.core.infra.notification.MBus;
 
-public class Sns implements MBus {
+public class Sns {
 
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
 

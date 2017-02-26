@@ -6,35 +6,35 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.shmenkins.core.handler.BasicHandler;
-import com.shmenkins.core.infra.notification.MBus;
+import com.shmenkins.core.infra.notification.RepoChangeEvent;
+import com.shmenkins.core.infra.notification.Topic;
 import com.shmenkins.core.util.MapParser;
 
 public class WebhookHandler implements BasicHandler<Map<Object, Object>, Void> {
 
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-	// cache mBus
-	private final MBus mBus;
-	private final String topicName;
+	private final Topic<RepoChangeEvent> repoChangeTopic;
 
-	public WebhookHandler(MBus mBus, String topicName) {
-		this.mBus = mBus;
-		this.topicName = topicName;
+	public WebhookHandler(Topic<RepoChangeEvent> repoChangeTopic) {
+		this.repoChangeTopic = repoChangeTopic;
 
-		log.info("Instantiated;  mBus={}, topicName={}", mBus, topicName);
+		log.info("Instantiated;  topic={}", repoChangeTopic);
 	}
 
 	@Override
 	public Void handle(Map<Object, Object> input) {
 
-		log.debug("Handling; topicName={}", topicName);
+		log.debug("Handling; topic={}", repoChangeTopic);
 
 		MapParser json = new MapParser(input);
-		String repoUrl = json.get("body", "repository", "url");
-		String headCommit = json.get("body", "after");
-		log.debug("processing push; repoUrl={}, headCommit={}", repoUrl, headCommit);
+		RepoChangeEvent repoChangeEvent = new RepoChangeEvent();
+		repoChangeEvent.repoUrl = json.get("body", "repository", "url");
+		repoChangeEvent.headCommit = json.get("body", "after");
 
-		mBus.publish(topicName, "my-message");
+		log.debug("processing push; repoUrl={}, headCommit={}", repoChangeEvent.repoUrl, repoChangeEvent.headCommit);
+
+		repoChangeTopic.publish(repoChangeEvent);
 
 		return null;
 	}
