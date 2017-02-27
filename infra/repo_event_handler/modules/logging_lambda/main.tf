@@ -6,7 +6,7 @@ variable "s3_bucket" {}
 variable "memory_size" { default = 512 }
 variable "timeout" { default = 5 }
 variable "log_retention_in_days" { default = 30 }
-variable "env_vars" { type = "map" }
+variable "env_vars" { type = "map" default = {} }
 
 data "aws_s3_bucket_object" "lambda_file" {
   bucket = "${var.s3_bucket}"
