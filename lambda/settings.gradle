@@ -2,7 +2,12 @@ rootProject.name = "lambda"
 
 include "core"
 include "infra-aws"
+
 include "webhook-handler"
 include "WebhookLambda"
+
 include "build-scheduler"
 include "BuildSchedulerLambda"
+
+include "builder"
+include "BuilderLambda"

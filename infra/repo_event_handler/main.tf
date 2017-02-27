@@ -14,3 +14,8 @@ module "build_scheduler" {
   repo_update_topic_arn = "${module.webhook_handler.repo_update_topic_arn}"
 }
 
+module "builder" {
+  source = "./modules/builder"
+  s3_bucket = "${var.s3_bucket}"
+  build_scheduled_topic_arn = "${module.build_scheduler.build_scheduled_topic_arn}"
+}

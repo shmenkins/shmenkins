@@ -26,8 +26,4 @@ module "allow_sns_publish" {
   topic_arn = "${aws_sns_topic.build_scheduled.arn}"
 }
 
-data "aws_region" "current" { current = true }
-
-data "aws_caller_identity" "current" { }
-
-output "topic_arn" { value = "${aws_sns_topic.build_scheduled.arn}" }
+output "build_scheduled_topic_arn" { value = "${aws_sns_topic.build_scheduled.arn}" }
