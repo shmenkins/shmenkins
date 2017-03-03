@@ -19,3 +19,9 @@ module "builder" {
   s3_bucket = "${var.s3_bucket}"
   build_scheduled_topic_arn = "${module.build_scheduler.build_scheduled_topic_arn}"
 }
+
+module "files" {
+  source = "./modules/files"
+  s3_bucket = "${var.s3_bucket}"
+}
+
