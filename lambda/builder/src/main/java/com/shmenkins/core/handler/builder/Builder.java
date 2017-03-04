@@ -39,10 +39,11 @@ public class Builder implements BasicHandler<BuildScheduledEvent, Void> {
 		downloadFile(zipUrl, zipFile);
 
 		// extract
-		String destDir = "/tmp/" + buildScheduledEvent.repoChangeEvent.headCommit;
+		String destDir = "/tmp";
 		unzip(zipFile, destDir);
 
 		// download build tool
+		// download maven zip form s3
 
 		// extract
 
@@ -60,7 +61,7 @@ public class Builder implements BasicHandler<BuildScheduledEvent, Void> {
 				while ((zipEntry = zis.getNextEntry()) != null) {
 					String fileName = zipEntry.getName();
 					log.debug("Extracting {}", fileName);
-					File newFile = new File(destDir + fileName);
+					File newFile = new File(destDir + "/"+ fileName);
 					if (zipEntry.isDirectory()) {
 						newFile.mkdirs();
 					} else {
