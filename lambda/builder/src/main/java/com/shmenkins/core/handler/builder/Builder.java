@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import com.shmenkins.core.handler.BasicHandler;
 import com.shmenkins.core.infra.binarystorage.BinaryStorage;
 import com.shmenkins.core.infra.notification.BuildScheduledEvent;
-import com.shmenkins.core.infra.notification.RepoChangeEvent;
 
 import net.lingala.zip4j.core.ZipFile;
 
@@ -61,13 +60,6 @@ public class Builder implements BasicHandler<BuildScheduledEvent, Void> {
         }
 
         return null;
-    }
-
-    public static void main(String[] args) {
-        BuildScheduledEvent e = new BuildScheduledEvent();
-        e.repoChangeEvent = new RepoChangeEvent();
-        e.repoChangeEvent.headCommit = "9c5951a2face816006be6bca218ef0cbfa322b10";
-        e.repoChangeEvent.repoUrl = "https://github.com/rzhilkibaev/demo-simple-web";
     }
 
 }
