@@ -29,3 +29,5 @@ BuildSchedulerLambda:
 BuilderLambda:
 	cd lambda && ./gradlew :$@:publish
 
+lambda:
+	cd lambda && ./gradlew publish
