@@ -2,9 +2,7 @@ all-configs:
 	make gradle.properties
 	make terraform.tfvars
 
-gradle.properties:
-	cfgen gradle.properties --overwrite
-	ln -sf ../gradle.properties lambda/gradle.properties
+# terraform shortcuts
 
 terraform.tfvars:
 	cfgen terraform.tfvars --overwrite
@@ -15,3 +13,19 @@ tfplan:
 
 tfapply:
 	cd infra/repo_event_handler && terraform apply
+
+# gradle shortcuts
+
+gradle.properties:
+	cfgen gradle.properties --overwrite
+	ln -sf ../gradle.properties lambda/gradle.properties
+
+WebhookLambda:
+	cd lambda && ./gradlew :$@:publish
+
+BuildSchedulerLambda:
+	cd lambda && ./gradlew :$@:publish
+
+BuilderLambda:
+	cd lambda && ./gradlew :$@:publish
+
