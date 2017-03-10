@@ -10,3 +10,5 @@ terraform.tfvars:
 	cfgen terraform.tfvars --overwrite
 	ln -sf ../../terraform.tfvars infra/repo_event_handler/terraform.tfvars
 
+tfplan:
+	cd infra/repo_event_handler && terraform plan
