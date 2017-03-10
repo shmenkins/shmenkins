@@ -5,6 +5,8 @@ module "builder_lambda" {
   source = "../logging_lambda"
   name = "BuilderLambda"
   s3_bucket = "${var.s3_bucket}"
+  timeout = "300"
+  memory_size = "1536"
   env_vars = {
     BUCKET = "${var.s3_bucket}"
   }
