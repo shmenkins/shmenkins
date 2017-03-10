@@ -12,3 +12,6 @@ terraform.tfvars:
 
 tfplan:
 	cd infra/repo_event_handler && terraform plan
+
+tfapply:
+	cd infra/repo_event_handler && terraform apply
