@@ -3,6 +3,10 @@ variable "aws_account" {}
 variable "aws_region" {}
 variable "s3_bucket" {}
 
+terraform {
+  required_version = "~> 0.9.2"
+}
+
 module "webhook_handler" {
   source = "./modules/webhook_handler"
   s3_bucket = "${var.s3_bucket}"
