@@ -20,7 +20,7 @@ module "lambda_event_source_sns" {
 }
 
 # build status topic
-resource "aws_sns_topic" "build_status" {
-  name = "build_status"
+resource "aws_sns_topic" "build_status_change" {
+  name = "build_status_change"
 }
  
