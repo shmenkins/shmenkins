@@ -29,6 +29,11 @@ venv*
 build/
 dist/
 *.egg-info/
+*.pyc
 
 # binaries
 *.zip
+
+# make
+Makefile.vars
+
