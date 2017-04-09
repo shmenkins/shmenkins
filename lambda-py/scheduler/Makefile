@@ -1,6 +1,10 @@
 zip := "scheduler.zip"
 
-include Makefile.vars
+-include Makefile.vars
+
+init:
+	cp Makefile.vars.template Makefile.vars && \
+		${EDITOR} Makefile.vars
 
 test:
 	nosetests
