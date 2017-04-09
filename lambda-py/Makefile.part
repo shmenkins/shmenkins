@@ -1,0 +1,26 @@
+# This file is included into a service specific Makefile
+# (see builder, scheduler,...)
+# All paths in this file are relative to that Makefile
+
+# use current directory name as service name
+service_name := $(shell basename $(shell pwd))
+
+# this location is relative to the Makefile we are included into
+vars_file := ../Makefile.vars
+include $(vars_file)
+
+test:
+	nosetests
+
+init:
+	cp $(vars_file).template $(vars_file) && \
+		${EDITOR} $(vars_file)
+
+zip: test clean
+	zip -r $(service_name).zip main.py shmenkins --exclude \*.pyc
+
+publish: zip
+	aws s3 cp $(service_name).zip s3://$(bucket)/artifacts/$(service_name).zip
+
+clean:
+	rm -f $(service_name).zip
