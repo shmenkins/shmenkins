@@ -18,3 +18,9 @@ module "lambda_event_source_sns" {
   topic_arn = "${aws_sns_topic.artifact_out_of_date.arn}"
   function_arn = "${module.scheduler_lambda.function_arn}"
 }
+
+# build status topic
+resource "aws_sns_topic" "build_status" {
+  name = "build_status"
+}
+ 
