@@ -1,10 +1,15 @@
 #!/usr/bin/env python2
+"""
+Usage:
+    shmenkins build URL
+"""
 
 from __future__ import print_function
 import boto3
 import logging
 import os
 import json
+import docopt
 
 log_level = logging.INFO
 logger = logging.getLogger()
@@ -17,13 +22,16 @@ topic_arn_build_scheduled = "arn:aws:sns:" + region + ":" + account + ":build_sc
 
 sns = boto3.client("sns")
 
-def build(url):
+def main(args):
+    if args["build"]:
+        cmd_build(args["URL"])
+
+def cmd_build(url):
     message = json.dumps({"url": url})
     r = sns.publish(TopicArn=topic_arn_build_scheduled,
                 Message=message)
-
-    print(str(r))
     
 
 if __name__ == "__main__":
-    build("https://blah")
+    args = docopt.docopt(__doc__, version="0.1")
+    main(args)
