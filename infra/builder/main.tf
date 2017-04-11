@@ -11,7 +11,6 @@ module "builder_lambda" {
   name = "builder"
   s3_bucket = "${var.s3_bucket}"
   s3_key = "artifacts/builder.zip"
-  # arn:aws:sns:us-west-2:973368877303:build_status_change
   env_vars = {
     TOPIC_ARN_BUILD_STATUS_CHANGE = "arn:aws:sns:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:build_status_change"
     LOG_LEVEL = "DEBUG"
