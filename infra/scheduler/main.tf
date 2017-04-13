@@ -1,10 +1,5 @@
 variable "s3_bucket" {}
 
-# topic that the lambda listens to
-resource "aws_sns_topic" "artifact_out_of_date" {
-  name = "artifact_out_of_date"
-}
-
 # lambda
 module "scheduler_lambda" {
   source = "github.com/rzhilkibaev/logging_lambda.tf"
@@ -15,12 +10,10 @@ module "scheduler_lambda" {
 
 module "lambda_event_source_sns" {
   source = "github.com/rzhilkibaev/lambda_event_source_sns.tf"
-  topic_arn = "${aws_sns_topic.artifact_out_of_date.arn}"
+  topic_arn = "arn:aws:sns:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:artifact_outdated"
   function_arn = "${module.scheduler_lambda.function_arn}"
 }
 
-# build status topic
-resource "aws_sns_topic" "build_status_change" {
-  name = "build_status_change"
-}
- 
+data "aws_region" "current" { current = true }
+
+data "aws_caller_identity" "current" {}
