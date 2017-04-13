@@ -3,8 +3,10 @@ import boto3
 from mock import MagicMock
 
 # prepare environment before importing main
-region = boto3.session.Session().region_name
-account = boto3.client("sts").get_caller_identity().get("Account")
+#region = boto3.session.Session().region_name
+region = "dummy-region"
+#account = boto3.client("sts").get_caller_identity().get("Account")
+account = "dummy-account"
 os.environ["TOPIC_ARN_BUILD_STATUS_CHANGE"] = "arn:aws:sns:" + region + ":" + account + ":build_status_change"
 
 import main
