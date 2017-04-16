@@ -9,8 +9,9 @@ service_name := $(shell basename $(shell pwd))
 vars_file := ../Makefile.vars
 include $(vars_file)
 
+# don't run integration tests
 test:
-	nosetests
+	nosetests -a '!integration'
 
 init:
 	cp $(vars_file).template $(vars_file) && \
