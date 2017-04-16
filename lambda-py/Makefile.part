@@ -13,6 +13,10 @@ include $(vars_file)
 test:
 	nosetests -a '!integration'
 
+# run integration tests only
+itest:
+	nosetests -a 'integration'
+
 init:
 	cp $(vars_file).template $(vars_file) && \
 		${EDITOR} $(vars_file)
