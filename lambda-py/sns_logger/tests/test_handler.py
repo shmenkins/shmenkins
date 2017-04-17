@@ -42,8 +42,8 @@ def test_persist_called():
 def test_message_persisted_in_dynamo():
     main.handler(event, None)
     time.sleep(5)
-    item = table_sns_log.get_item(Key={"interaction_id": "123"})
+    response = table_sns_log.get_item(Key={"interaction_id": "123"})
     expected_item = {"interaction_id": "123", "url": "https://github.com/foo/bar"}
-    actual_item = item.get("Item")
+    actual_item = response.get("Item")
     assert actual_item == expected_item
 
