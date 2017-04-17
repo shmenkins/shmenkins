@@ -9,6 +9,10 @@ resource "aws_dynamodb_table" "sns_log" {
     name = "interaction_id"
     type = "S"
   }
+  attribute {
+    name = "timestamp"
+    type = "S"
+  }
 }
 
 module "sns_logger_lambda" {
