@@ -3,7 +3,6 @@ import json
 import logging
 import os
 
-topic_arn_build_status_change = os.environ["TOPIC_ARN_BUILD_STATUS_CHANGE"]
 log_level = os.environ.get("LOG_LEVEL")
 
 if not log_level:
@@ -12,30 +11,28 @@ if not log_level:
 logger = logging.getLogger()
 logger.setLevel(log_level)
 
-sns = boto3.client("sns")
+region = boto3.session.Session().region_name
+account = boto3.client("sts").get_caller_identity().get("Account")
+
+sns = boto3.resource("sns")
+topic_build_status_changed = sns.Topic("arn:aws:sns:" + region + ":" + account + ":build_status_changed")
 
 
 def handler(event, context):
     logger.debug("Handling %s", str(event))
 
-    build_scheduled_event = parse_build_scheduled_event(event)
+    # parse input
+    sns_record = event["Records"][0]["Sns"]
+    timestamp = sns_record["Timestamp"]
+    build_scheduled_event = json.loads(sns_record["Message"])
+    url = build_scheduled_event["url"]
+    interaction_id = build_scheduled_event["interaction_id"]
 
-    publish_status_change_event(build_scheduled_event["url"], "finished")
+    # publish event
+    publish_event({"interaction_id": interaction_id, "url": url, "status": "finished"})
 
     logger.debug("Finished handling %s", str(event))
 
 
-def parse_build_scheduled_event(event):
-    return json.loads(event["Records"][0]["Sns"]["Message"])
-
-
-def publish_status_change_event(url, status):
-    build_status_change_event = {
-        "url": url,
-        "status": status
-    }
-    publish_event(topic_arn_build_status_change, build_status_change_event)
-
-
-def publish_event(topic_arn, event):
-    sns.publish(TopicArn=topic_arn, Message=json.dumps(event))
+def publish_event(message):
+    topic_build_status_changed.publish(Message=json.dumps(message))

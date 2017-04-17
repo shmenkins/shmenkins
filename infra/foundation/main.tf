@@ -8,7 +8,7 @@ resource "aws_sns_topic" "artifact_outdated" {
 }
 
 # when build status changes
-resource "aws_sns_topic" "build_status_change" {
-  name = "build_status_change"
+resource "aws_sns_topic" "build_status_changed" {
+  name = "build_status_changed"
 }
  

@@ -42,6 +42,7 @@ def test_persist_called():
     expected_item = {
             "interaction_id": "123",
             "timestamp": "2017-04-10T05:12:56.297Z",
+            "topic_name": "build_scheduled",
             "message": {
                 "interaction_id": "123",
                 "url": "https://github.com/foo/bar"}}
@@ -67,6 +68,7 @@ def test_message_persisted_in_dynamo():
     expected_items = [{
             "interaction_id": interaction_id,
             "timestamp": "2017-04-10T05:12:56.297Z",
+            "topic_name": "build_scheduled",
             "message": {
                 "interaction_id": interaction_id,
                 "url": "https://github.com/foo/bar"}}]

@@ -2,14 +2,22 @@ from __future__ import print_function
 import boto3
 import time
 import shmenkins
+import uuid
+import json
 
 def test_build_status_published():
     """ When a message posted to 'build_scheduled' topic
         then a buid status is published to 'build_status_changed' topic """
-    shmenkins.topic_build_scheduled.publish(Message='{"interaction_id": "123", "url": "https://github.com/foo/bar"}')
-    time.sleep(1)
+    interaction_id = str(uuid.uuid4())
+    print(interaction_id)
+    build_scheduled_event = {
+            "interaction_id": interaction_id,
+            "url": "https://github.com/foo/bar"}
+    shmenkins.topic_build_scheduled.publish(Message=json.dumps(build_scheduled_event))
 
-    actual_item = shmenkins.table_sns_log.get_item(Key={"interaction_id": "123"}).get("Item")
-    expected_item = {"interaction_id": "123", "url": "https://github.com/foo/bar"}
-    assert actual_item == expected_item
+    time.sleep(2)
+    items = shmenkins.get_published_events(interaction_id)
+    build_status_changed_events = [x for x in items if x["topic_name"] == "build_status_changed"]
+
+    assert len(build_status_changed_events) == 1
 

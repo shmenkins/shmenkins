@@ -1,4 +1,5 @@
 import boto3
+from boto3.dynamodb.conditions import Key, Attr
 
 
 region = boto3.session.Session().region_name
@@ -8,6 +9,14 @@ dynamo = boto3.resource("dynamodb")
 
 topic_build_scheduled = sns.Topic("arn:aws:sns:" + region + ":" + account + ":build_scheduled")
 table_sns_log = dynamo.Table("sns_log")
+
+
+def get_published_events(interaction_id):
+    items = table_sns_log.query(KeyConditionExpression=Key("interaction_id").eq(interaction_id)).get("Items")
+    if items:
+        return items
+    else:
+        return []
 
 
 def get_sns_event(message):

@@ -40,6 +40,20 @@ resource "aws_sns_topic_subscription" "invoke_lambda_on_build_scheduled" {
   endpoint = "${module.sns_logger_lambda.function_arn}"
 }
 
+resource "aws_lambda_permission" "allow_invocation_from_sns_build_status_changed" {
+  function_name = "${module.sns_logger_lambda.function_arn}"
+  statement_id = "allow_invocation_from_sns_build_status_changed"
+  action = "lambda:InvokeFunction"
+  principal = "sns.amazonaws.com"
+  source_arn = "arn:aws:sns:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:build_status_changed"
+}
+
+resource "aws_sns_topic_subscription" "invoke_lambda_on_build_status_changed" {
+  topic_arn = "arn:aws:sns:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:build_status_changed"
+  protocol = "lambda"
+  endpoint = "${module.sns_logger_lambda.function_arn}"
+}
+
 resource "aws_lambda_permission" "allow_invocation_from_sns_artifact_outdated" {
   function_name = "${module.sns_logger_lambda.function_arn}"
   statement_id = "allow_invocation_from_sns_artifact_outdated"
@@ -52,6 +66,25 @@ resource "aws_sns_topic_subscription" "invoke_lambda_on_artifact_outdated" {
   topic_arn = "arn:aws:sns:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:artifact_outdated"
   protocol = "lambda"
   endpoint = "${module.sns_logger_lambda.function_arn}"
+}
+
+resource "aws_iam_role_policy" "allow_dynamodb_put" {
+  name = "allow_dynamodb_put"
+  role = "${module.sns_logger_lambda.role_id}"
+  policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Action": [
+          "dynamodb:PutItem"
+        ],
+        "Effect": "Allow",
+        "Resource": "${aws_dynamodb_table.sns_log.arn}"
+      }
+    ]
+}
+EOF
 }
 
 data "aws_region" "current" { current = true }
