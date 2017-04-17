@@ -17,15 +17,16 @@ table_sns_log = boto3.resource("dynamodb").Table("sns_log")
 def handler(event, context):
     logger.debug("Handling %s", str(event))
 
-    shmenkins_event = parse_shmenkins_event(event)
+    sns_record = event["Records"][0]["Sns"]
+    timestamp = sns_record["Timestamp"]
+    message = json.loads(sns_record["Message"])
 
-    persist_item(shmenkins_event)
+    persist_item({
+        "interaction_id": message["interaction_id"],
+        "timestamp": timestamp,
+        "message": message})
 
     logger.debug("Finished handling %s", str(event))
-
-
-def parse_shmenkins_event(event):
-    return json.loads(event["Records"][0]["Sns"]["Message"])
 
 
 def persist_item(item):
