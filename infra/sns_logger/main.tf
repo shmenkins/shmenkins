@@ -9,6 +9,7 @@ resource "aws_dynamodb_table" "sns_log" {
     name = "interaction_id"
     type = "S"
   }
+  range_key = "timestamp"
   attribute {
     name = "timestamp"
     type = "S"
