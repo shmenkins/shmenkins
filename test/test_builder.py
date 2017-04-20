@@ -9,7 +9,6 @@ def test_build_status_published():
     """ When a message posted to 'build_scheduled' topic
         then a buid status is published to 'build_status_changed' topic """
     interaction_id = str(uuid.uuid4())
-    print(interaction_id)
     build_scheduled_event = {
             "interaction_id": interaction_id,
             "url": "https://github.com/foo/bar"}
