@@ -14,7 +14,7 @@ def test_build_status_published():
             "url": "https://github.com/foo/bar"}
     shmenkins.topic_build_scheduled.publish(Message=json.dumps(build_scheduled_event))
 
-    time.sleep(2)
+    time.sleep(5)
     items = shmenkins.get_published_events(interaction_id)
     build_status_changed_events = [x for x in items if x["topic_name"] == "build_status_changed"]
 
