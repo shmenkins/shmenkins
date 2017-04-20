@@ -26,46 +26,22 @@ module "sns_logger_lambda" {
   }
 }
 
-resource "aws_lambda_permission" "allow_invocation_from_sns_build_scheduled" {
-  function_name = "${module.sns_logger_lambda.function_arn}"
-  statement_id = "allow_invocation_from_sns_build_scheduled"
-  action = "lambda:InvokeFunction"
-  principal = "sns.amazonaws.com"
-  source_arn = "arn:aws:sns:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:build_scheduled"
+module "lambda_event_source_sns_build_scheduled" {
+  source = "github.com/rzhilkibaev/lambda_event_source_sns.tf"
+  topic_name = "build_scheduled"
+  function_arn = "${module.sns_logger_lambda.function_arn}"
 }
 
-resource "aws_sns_topic_subscription" "invoke_lambda_on_build_scheduled" {
-  topic_arn = "arn:aws:sns:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:build_scheduled"
-  protocol = "lambda"
-  endpoint = "${module.sns_logger_lambda.function_arn}"
+module "lambda_event_source_sns_build_status_changed" {
+  source = "github.com/rzhilkibaev/lambda_event_source_sns.tf"
+  topic_name = "build_status_changed"
+  function_arn = "${module.sns_logger_lambda.function_arn}"
 }
 
-resource "aws_lambda_permission" "allow_invocation_from_sns_build_status_changed" {
-  function_name = "${module.sns_logger_lambda.function_arn}"
-  statement_id = "allow_invocation_from_sns_build_status_changed"
-  action = "lambda:InvokeFunction"
-  principal = "sns.amazonaws.com"
-  source_arn = "arn:aws:sns:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:build_status_changed"
-}
-
-resource "aws_sns_topic_subscription" "invoke_lambda_on_build_status_changed" {
-  topic_arn = "arn:aws:sns:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:build_status_changed"
-  protocol = "lambda"
-  endpoint = "${module.sns_logger_lambda.function_arn}"
-}
-
-resource "aws_lambda_permission" "allow_invocation_from_sns_artifact_outdated" {
-  function_name = "${module.sns_logger_lambda.function_arn}"
-  statement_id = "allow_invocation_from_sns_artifact_outdated"
-  action = "lambda:InvokeFunction"
-  principal = "sns.amazonaws.com"
-  source_arn = "arn:aws:sns:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:artifact_outdated"
-}
-
-resource "aws_sns_topic_subscription" "invoke_lambda_on_artifact_outdated" {
-  topic_arn = "arn:aws:sns:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:artifact_outdated"
-  protocol = "lambda"
-  endpoint = "${module.sns_logger_lambda.function_arn}"
+module "lambda_event_source_sns_artifact_outdated" {
+  source = "github.com/rzhilkibaev/lambda_event_source_sns.tf"
+  topic_name = "artifact_outdated"
+  function_arn = "${module.sns_logger_lambda.function_arn}"
 }
 
 resource "aws_iam_role_policy" "allow_dynamodb_put" {
@@ -87,6 +63,6 @@ resource "aws_iam_role_policy" "allow_dynamodb_put" {
 EOF
 }
 
-data "aws_region" "current" { current = true }
+#data "aws_region" "current" { current = true }
 
-data "aws_caller_identity" "current" {}
+#data "aws_caller_identity" "current" {}
