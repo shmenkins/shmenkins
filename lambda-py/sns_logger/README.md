@@ -1,5 +1,5 @@
 # Description
-This component listens to all SNS topics in of the platform and puts every SNS message into `sns_log` table.
+This component listens to all SNS topics of the platform and puts every SNS message into `sns_log` table.
 
 The table items must have following attrubutes:
 ```json
