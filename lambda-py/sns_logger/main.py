@@ -18,14 +18,14 @@ def handler(event, context):
     logger.debug("Handling %s", str(event))
 
     sns_record = event["Records"][0]["Sns"]
-    timestamp = sns_record["Timestamp"]
+    message_timestamp = sns_record["Timestamp"]
     # topic arn sample: 'arn:aws:sns:us-west-2:000000000000:build_scheduled'
     topic_name = sns_record["TopicArn"].split(":")[5]
     message = json.loads(sns_record["Message"])
 
     persist_item({
         "interaction_id": message["interaction_id"],
-        "timestamp": timestamp,
+        "message_timestamp": message_timestamp,
         "topic_name": topic_name,
         "message": message})
 

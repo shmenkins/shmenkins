@@ -41,7 +41,7 @@ def test_persist_called():
     main.handler(create_event(), None)
     expected_item = {
             "interaction_id": "123",
-            "timestamp": "2017-04-10T05:12:56.297Z",
+            "message_timestamp": "2017-04-10T05:12:56.297Z",
             "topic_name": "build_scheduled",
             "message": {
                 "interaction_id": "123",
@@ -67,7 +67,7 @@ def test_message_persisted_in_dynamo():
     response = table_sns_log.query(KeyConditionExpression=Key("interaction_id").eq(interaction_id))
     expected_items = [{
             "interaction_id": interaction_id,
-            "timestamp": "2017-04-10T05:12:56.297Z",
+            "message_timestamp": "2017-04-10T05:12:56.297Z",
             "topic_name": "build_scheduled",
             "message": {
                 "interaction_id": interaction_id,
