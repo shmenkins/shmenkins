@@ -16,6 +16,7 @@ Signal to a scheduler that buid status changed.
   "url": "String; source code repo url",
   "status": "String; new build status (started, finished,...)"
 }
+```
 ## artifact_outdated
 Signals to a dependency manager that an artifact needs to be rebuilt.
 ```json
