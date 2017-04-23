@@ -233,7 +233,9 @@ apigw_event = {
 @patch("main.publish_event", MagicMock())
 def test_build_request_published():
     assert main.topic_artifact_outdated.arn == "arn:aws:sns:" + region + ":" + account + ":artifact_outdated"
-    main.handler(apigw_event, None)
+    response = main.handler(apigw_event, None)
+    actual_interaction_id = response["headers"]["X-Shmenkins-InteractionId"]
+    assert len(actual_interaction_id) == 36
     expected_message = {"interaction_id": ANY, "url": "https://github.com/rzhilkibaev/cfgen"}
     main.publish_event.assert_called_with(expected_message)
 

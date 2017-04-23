@@ -32,7 +32,7 @@ def handler(event, context):
 
     logger.debug("Finished handling %s", str(event))
 
-    return {}
+    return {"headers": {"X-Shmenkins-InteractionId": interaction_id}}
 
 
 def publish_event(message):
