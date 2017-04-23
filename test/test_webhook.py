@@ -21,9 +21,9 @@ def test_when_push_notification_then_artifact_outdated_message_published():
     
     time.sleep(2)
     items = shmenkins.get_published_events(interaction_id)
-    build_status_changed_events = [x for x in items if x["topic_name"] == "artifact_outdated"]
+    artifact_outdated_events = [x for x in items if x["topic_name"] == "artifact_outdated"]
 
-    assert len(build_status_changed_events) == 1
+    assert len(artifact_outdated_events) == 1
 
 
 # payload is stored as a string in the event body
