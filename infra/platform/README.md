@@ -18,9 +18,9 @@ Signal to a scheduler that buid status changed.
 }
 ```
 ## artifact_outdated
-Signals to a dependency manager that an artifact needs to be rebuilt.
+Signals to a scheduler that a build for an artifact needs to be scheduled.
 ```json
 {
   "interaction_id": "String; interaction id",
-  "artifact_id": "String; id of the outdated artifact"
+  "url": "String; source code repo url for the outdated artifact"
 }
