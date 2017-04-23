@@ -11,13 +11,6 @@ resource "aws_api_gateway_method" "any" {
   authorization = "NONE"
 }
 
-resource "aws_api_gateway_method_response" "201" {
-  rest_api_id = "${aws_api_gateway_rest_api.webhook.id}"
-  resource_id = "${aws_api_gateway_rest_api.webhook.root_resource_id}"
-  http_method = "${aws_api_gateway_method.any.http_method}"
-  status_code = "201"
-}
-
 resource "aws_api_gateway_integration" "webhook_api" {
   rest_api_id             = "${aws_api_gateway_rest_api.webhook.id}"
   resource_id             = "${aws_api_gateway_rest_api.webhook.root_resource_id}"
