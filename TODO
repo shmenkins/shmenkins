@@ -1,3 +1,10 @@
+test that artifact_outdated event is published by webhook
+
+
+
+
+
+
 webhook component (dummy)
     accept any push notification
     post repo url to the topic "artifact_outdated"
