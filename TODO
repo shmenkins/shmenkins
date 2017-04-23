@@ -1,0 +1,23 @@
+webhook component (dummy)
+    accept any push notification
+    post repo url to the topic "artifact_outdated"
+
+scheduler component (dummy)
+    for every "artifact_outdated" message publish one "build_scheduled" message
+
+builder (dummy)
+    for every "build_scheduled" message publish one "build_status_changed" message
+
+Milestone1: simple code_change->dummy_artifact_built functionality
+
+builder (dependency aware)
+    collect immediate (non-transitive) dependencies
+    publish them to "artifact_updated"
+
+dependency manager
+    on every "artifact_updated" message
+    persist dependency information of that artifact
+    find all downstream dependents of the artifact
+    for every downstream dependent publish "artifact_outdated" message
+
+Milestone2: rebuilds dependent artifacts
