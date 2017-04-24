@@ -4,25 +4,27 @@ import time
 import shmenkins
 import json
 import requests
-
-
-api_url = "<insert_api_url_here>"
+import config
 
 
 def test_when_push_notification_then_artifact_outdated_message_published():
     """ When a push notification received from github
         then a the repo url is published to 'artifact_outdated' topic """
 
+    # send github push notification
     post_data = json.dumps(github_webhook_payload)
-    response = requests.post(api_url, data=post_data, headers={"Content-Type": "application/json"})
+    response = requests.post(config.webhook_api_url, data=post_data, headers={"Content-Type": "application/json"})
+    # check response
     assert response.status_code == 201
     interaction_id = response.headers.get("X-Shmenkins-InteractionId")
     assert len(interaction_id) == 36
     
+    # let the lambda finish
     time.sleep(2)
+
+    # check sns log for a message in "artifact_outdated" topic
     items = shmenkins.get_published_events(interaction_id)
     artifact_outdated_events = [x for x in items if x["topic_name"] == "artifact_outdated"]
-
     assert len(artifact_outdated_events) == 1
 
 
