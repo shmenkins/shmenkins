@@ -8,6 +8,7 @@ sns = boto3.resource("sns")
 dynamo = boto3.resource("dynamodb")
 
 topic_build_scheduled = sns.Topic("arn:aws:sns:" + region + ":" + account + ":build_scheduled")
+topic_artifact_outdated = sns.Topic("arn:aws:sns:" + region + ":" + account + ":artifact_outdated")
 table_sns_log = dynamo.Table("sns_log")
 
 
