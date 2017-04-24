@@ -30,6 +30,8 @@ build/
 dist/
 *.egg-info/
 *.pyc
+# This config file contais secrets
+config.py
 
 # binaries
 *.zip
