@@ -22,10 +22,18 @@ init:
 		${EDITOR} $(vars_file)
 
 zip: test clean
-	zip -r $(service_name).zip main.py shmenkins --exclude \*.pyc
+	zip -r $(service_name).zip awslambda/main.py shmenkins --exclude \*.pyc
 
-publish: zip
+publish:
 	aws s3 cp $(service_name).zip s3://$(bucket)/artifacts/$(service_name).zip
 
 clean:
 	rm -f $(service_name).zip
+
+test2:
+	tox
+
+zip2:
+	cd src && \
+		zip -r $(service_name).zip '.' --include '*.py' && \
+		mv $(service_name).zip ../
