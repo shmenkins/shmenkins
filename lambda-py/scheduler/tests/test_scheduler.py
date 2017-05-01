@@ -1,4 +1,3 @@
-import os
 import boto3
 import main
 from mock import MagicMock, patch

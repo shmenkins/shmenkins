@@ -1,3 +1,5 @@
+neovim
 boto3
-nose
+pytest
 mock
+tox
