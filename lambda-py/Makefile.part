@@ -11,29 +11,26 @@ include $(vars_file)
 
 # don't run integration tests
 test:
-	nosetests -a '!integration'
+	tox
 
 # run integration tests only
+# need to run pytest as a module and from src
+# so the src is added to the PYTHONPATH
 itest:
-	nosetests -a 'integration'
+	cd src && \
+		python -m pytest -m 'integration' ../tests
 
 init:
 	cp $(vars_file).template $(vars_file) && \
 		${EDITOR} $(vars_file)
 
-zip: test clean
-	zip -r $(service_name).zip awslambda/main.py shmenkins --exclude \*.pyc
+zip: test
+	cd src && \
+		zip -r $(service_name).zip '.' --include '*.py' && \
+		mv $(service_name).zip ../
 
-publish:
+publish: zip
 	aws s3 cp $(service_name).zip s3://$(bucket)/artifacts/$(service_name).zip
 
 clean:
 	rm -f $(service_name).zip
-
-test2:
-	tox
-
-zip2:
-	cd src && \
-		zip -r $(service_name).zip '.' --include '*.py' && \
-		mv $(service_name).zip ../

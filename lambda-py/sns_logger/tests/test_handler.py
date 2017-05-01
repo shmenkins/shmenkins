@@ -4,9 +4,9 @@ import boto3
 import time
 import uuid
 import json
+import pytest
 from mock import MagicMock
 from mock import patch
-from nose.plugins.attrib import attr
 from boto3.dynamodb.conditions import Key, Attr
 
 
@@ -35,7 +35,6 @@ def create_event():
                                 u'TopicArn': u'arn:aws:sns:us-west-2:000000000000:build_scheduled', u'Subject': None}}]}
 
 
-@attr("local")
 @patch("main.persist_item", MagicMock())
 def test_persist_called():
     main.handler(create_event(), None)
@@ -49,7 +48,7 @@ def test_persist_called():
     main.persist_item.assert_called_with(expected_item)
     assert main.table_sns_log.table_name == "sns_log"
 
-@attr("integration")
+@pytest.mark.integration
 def test_message_persisted_in_dynamo():
     """
     When any message posted to any topic
