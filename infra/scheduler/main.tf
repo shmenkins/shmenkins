@@ -10,7 +10,7 @@ module "scheduler_lambda" {
 
 module "lambda_event_source_sns" {
   source = "github.com/rzhilkibaev/lambda_event_source_sns.tf"
-  topic_arn = "arn:aws:sns:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:artifact_outdated"
+  topic_name = "artifact_outdated"
   function_arn = "${module.scheduler_lambda.function_arn}"
 }
 
