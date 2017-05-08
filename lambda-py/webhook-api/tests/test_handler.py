@@ -232,7 +232,6 @@ apigw_event = {
 
 @patch("main.publish_event", MagicMock())
 def test_build_request_published():
-    assert main.topic_artifact_outdated.arn == "arn:aws:sns:" + region + ":" + account + ":artifact_outdated"
     response = main.handler(apigw_event, None)
     actual_interaction_id = response["headers"]["X-Shmenkins-InteractionId"]
     assert len(actual_interaction_id) == 36
