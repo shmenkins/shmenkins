@@ -2,10 +2,6 @@ import boto3
 import main
 from mock import MagicMock, patch
 
-region = boto3.session.Session().region_name
-account = boto3.client("sts").get_caller_identity().get("Account")
-
-
 event = {u'Records': [{u'EventVersion': u'1.0',
                        u'EventSubscriptionArn': u'arn:aws:sns:us-west-2:000000000000:build_scheduled:00000000-0000-0000-0000-000000000000',
                        u'EventSource': u'aws:sns',
@@ -25,7 +21,6 @@ event = {u'Records': [{u'EventVersion': u'1.0',
 
 @patch("main.publish_event", MagicMock())
 def test_build_scheduled():
-    assert main.topic_build_scheduled.arn == "arn:aws:sns:" + region + ":" + account + ":build_scheduled"
     main.handler(event, None)
     expected_event = {"interaction_id": "123", "url": "https://github.com/foo/bar"}
     main.publish_event.assert_called_with(expected_event)

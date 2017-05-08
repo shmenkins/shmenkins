@@ -24,13 +24,41 @@ init:
 	cp $(vars_file).template $(vars_file) && \
 		${EDITOR} $(vars_file)
 
-zip: test
-	cd src && \
+venv:
+	virtualenv venv -p python3
+
+zip:
+	mkdir -p zip && \
+		cp -r src/** zip && \
+		cp -r venv/lib/python3.5/site-packages/shmenkins zip && \
+		cd zip && \
 		zip -r $(service_name).zip '.' --include '*.py' && \
 		mv $(service_name).zip ../
+
+#	cd src && \
+#		zip -r $(service_name).zip '.' --include '*.py' && \
+#		mv $(service_name).zip ../ && \
+#		cd ../ && \
+#		zip -u $(service_name).zip /
 
 publish: zip
 	aws s3 cp $(service_name).zip s3://$(bucket)/artifacts/$(service_name).zip
 
 clean:
-	rm -f $(service_name).zip
+	rm -rf $(service_name).zip dist build .cache .tox
+
+wheel:
+	source venv/bin/activate && \
+		python setup.py bdist_wheel
+
+upload-local: wheel
+	mkdir -p ~/.cache/shmenkins && \
+		cp dist/*.whl ~/.cache/shmenkins/
+
+dependencies:
+	source venv/bin/activate && \
+		pip install \
+		-r requirements.txt \
+		--force-reinstall \
+		--upgrade \
+		--find-links ~/.cache/shmenkins
