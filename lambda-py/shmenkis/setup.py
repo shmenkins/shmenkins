@@ -9,11 +9,11 @@ from setuptools import find_packages, setup
 
 
 setup(
-    name="shmenkins_common",
+    name="shmenkins",
     version="0.1.0",
     license="MIT",
-    description="Common Library.",
-    long_description="Common Library.",
+    description="Shmenkins Library.",
+    long_description="Shmenkins Library.",
     author="Renat Zhilkibaev",
     author_email="rzhilkibaev@gmail.com",
     url="https://github.com/rzhilkibaev/shmenkins",

@@ -50,7 +50,7 @@ publish: zip
 clean:
 	rm -rf $(service_name).zip dist build .cache .tox
 
-wheel:
+wheel: clean
 	source venv/bin/activate && \
 		python setup.py bdist_wheel
 
