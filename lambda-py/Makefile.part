@@ -13,11 +13,17 @@ include $(vars_file)
 test:
 	tox
 
+quick-test:
+	source venv/bin/activate && \
+		cd src && \
+		python -m pytest ../tests
+
 # run integration tests only
 # need to run pytest as a module and from src
 # so the src is added to the PYTHONPATH
 itest:
-	cd src && \
+	source venv/bin/activate && \
+		cd src && \
 		python -m pytest -m 'integration' ../tests
 
 init:
