@@ -24,7 +24,7 @@ init:
 	cp $(vars_file).template $(vars_file) && \
 		${EDITOR} $(vars_file)
 
-venv:
+virtualenv:
 	virtualenv venv -p python3
 
 zip:
@@ -55,7 +55,8 @@ upload-local: wheel
 	mkdir -p ~/.cache/shmenkins && \
 		cp dist/*.whl ~/.cache/shmenkins/
 
-dependencies:
+# Installs all project requirements
+install-requirements:
 	source venv/bin/activate && \
 		pip install \
 		-r requirements.txt \
