@@ -3,4 +3,4 @@ boto3
 pytest
 mock
 tox
-shmenkins_common
+shmenkins
