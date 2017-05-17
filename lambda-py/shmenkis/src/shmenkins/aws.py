@@ -10,6 +10,6 @@ class Topic:
         self.__topic = _sns.Topic("arn:aws:sns:" + _region + ":" + _account + ":" + topic_name)
 
 
-    def publish(self, msg: dict) -> None:
-        """ Publish a message, msg must be dict and is converted to json """
-        self.__topic.publish(Message=json.dumps(msg))
+    def publish(self, obj: dict) -> None:
+        """ Publish a message, obj must be dict and is converted to json """
+        self.__topic.publish(Message=json.dumps(obj))
