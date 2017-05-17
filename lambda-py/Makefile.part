@@ -28,12 +28,15 @@ virtualenv:
 	virtualenv venv -p python3
 
 zip:
-	mkdir -p zip && \
-		cp -r src/** zip && \
-		cp -r venv/lib/python3.5/site-packages/shmenkins zip && \
-		cd zip && \
+	rm -rf tmp && \
+		mkdir tmp && \
+		cp -r src/** tmp && \
+		cp -r venv/lib/python3.5/site-packages/shmenkins tmp && \
+		cd tmp && \
 		zip -r $(service_name).zip '.' --include '*.py' && \
-		mv $(service_name).zip ../
+		mv $(service_name).zip ../ && \
+		cd .. && \
+		rm -rf tmp
 
 #	cd src && \
 #		zip -r $(service_name).zip '.' --include '*.py' && \
