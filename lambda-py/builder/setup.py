@@ -23,6 +23,6 @@ setup(
     include_package_data=True,
     zip_safe=False,
     install_requires=[
-        "boto3"
+        "boto3", "shmenkins"
     ],
 )

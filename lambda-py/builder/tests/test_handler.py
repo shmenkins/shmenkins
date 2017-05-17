@@ -1,10 +1,7 @@
 import os
 import boto3
 import main
-from mock import MagicMock
-
-region = boto3.session.Session().region_name
-account = boto3.client("sts").get_caller_identity().get("Account")
+from mock import MagicMock, patch
 
 
 event = {u'Records': [{u'EventVersion': u'1.0',
@@ -23,11 +20,9 @@ event = {u'Records': [{u'EventVersion': u'1.0',
                                 u'UnsubscribeUrl': u'xxx',
                                 u'TopicArn': u'arn:aws:sns:us-west-2:000000000000:build_scheduled', u'Subject': None}}]}
 
-
+@patch("main.topic_build_status_changed.publish", MagicMock())
 def test_build_status_published():
-    assert main.topic_build_status_changed.arn == "arn:aws:sns:" + region + ":" + account + ":build_status_changed"
-    main.publish_event = MagicMock()
     main.handler(event, None)
     expected_event = {"interaction_id": "123", "url": "https://github.com/foo/bar", "status": "finished"}
-    main.publish_event.assert_called_with(expected_event)
+    main.topic_build_status_changed.publish.assert_called_with(expected_event)
 
