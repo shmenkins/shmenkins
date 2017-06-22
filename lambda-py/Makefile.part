@@ -13,6 +13,7 @@ include $(vars_file)
 test:
 	tox
 
+# Quick test without tox
 quick-test:
 	source venv/bin/activate && \
 		cd src && \
@@ -26,13 +27,16 @@ itest:
 		cd src && \
 		python -m pytest -m 'integration' ../tests
 
+# Configures this project
 init:
 	cp $(vars_file).template $(vars_file) && \
 		${EDITOR} $(vars_file)
 
+# Creates venv
 virtualenv:
 	virtualenv venv -p python3
 
+# Makes a lambda zip
 zip:
 	rm -rf tmp && \
 		mkdir tmp && \
@@ -50,21 +54,27 @@ zip:
 #		cd ../ && \
 #		zip -u $(service_name).zip /
 
+# Copies the lambda zip to S3 so it's available to terraform
 publish: zip
 	aws s3 cp $(service_name).zip s3://$(bucket)/artifacts/$(service_name).zip
 
 clean:
 	rm -rf $(service_name).zip dist build .cache .tox
 
+# Makes a wheel
+# mvn package
 wheel: clean
 	source venv/bin/activate && \
 		python setup.py bdist_wheel
 
+# Copies the wheel to a ~/.cache/shmenkins so it's available to other project
+# mvn install
 upload-local: wheel
 	mkdir -p ~/.cache/shmenkins && \
 		cp dist/*.whl ~/.cache/shmenkins/
 
 # Installs all project requirements
+# mvn dependency:go-offline
 install-requirements:
 	source venv/bin/activate && \
 		pip install \
