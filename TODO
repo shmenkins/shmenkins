@@ -1,5 +1,8 @@
 Milestone1: simple code_change->dummy_artifact_built functionality
 
+builder (no-dependency)
+    use aws codebuild (source code must have buildspec.yml)
+
 builder (dependency aware)
     collect immediate (non-transitive) dependencies
     publish them to "artifact_updated"
