@@ -1,9 +1,3 @@
-scheduler component (dummy)
-    for every "artifact_outdated" message publish one "build_scheduled" message
-
-builder (dummy)
-    for every "build_scheduled" message publish one "build_status_changed" message
-
 Milestone1: simple code_change->dummy_artifact_built functionality
 
 builder (dependency aware)
