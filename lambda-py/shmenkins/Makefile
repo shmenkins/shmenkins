@@ -37,7 +37,3 @@ verify: package
 install: verify
 	mkdir -p ~/.cache/shmenkins && \
 		cp dist/*.whl ~/.cache/shmenkins/
-
-# Deploys the build artifact(s) to a binary repo
-deploy: verify
-	echo "Not implemented"
