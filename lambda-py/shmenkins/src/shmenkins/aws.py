@@ -1,14 +1,20 @@
 import boto3
 import json
 
-_region = boto3.session.Session().region_name
-_account = boto3.client("sts").get_caller_identity().get("Account")
-_sns = boto3.resource("sns")
+
+class Aws:
+    def __init__(self) -> None:
+        self.__region = boto3.session.Session().region_name
+        self.__account = boto3.client("sts").get_caller_identity().get("Account")
+        self.__sns = boto3.resource("sns")
+
+    def get_topic(self, topic_name: str) -> Topic:
+        return Topic(self.__sns.Topic("arn:aws:sns:" + self.__region + ":" + self.__account + ":" + topic_name))
+
 
 class Topic:
-    def __init__(self, topic_name: str) -> None:
-        self.__topic = _sns.Topic("arn:aws:sns:" + _region + ":" + _account + ":" + topic_name)
-
+    def __init__(self, topic) -> None:
+        self.__topic = topic
 
     def publish(self, obj: dict) -> None:
         """ Publish a message, obj must be dict and is converted to json """
