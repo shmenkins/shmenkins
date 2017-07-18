@@ -34,7 +34,7 @@ init:
 
 # Creates venv
 virtualenv:
-	virtualenv venv -p python3
+	virtualenv venv -p python3.6
 
 # Makes a lambda zip
 zip:
