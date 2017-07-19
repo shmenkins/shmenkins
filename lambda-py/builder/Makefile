@@ -2,10 +2,16 @@
 #
 # Use current directory name as project name
 project_name := $(shell basename $(shell pwd))
+# Use same python version as in AWS Lambda
 python_interpreter := python3.6
 
+vars_file := Makefile.vars
+include $(vars_file)
 
-# Main targets
+# Configures this project
+Makefile.vars:
+	cp $(vars_file).template $(vars_file) && \
+		${EDITOR} $(vars_file)
 
 # Initializes the project
 init:
@@ -33,4 +39,24 @@ test-integration: clean
 	source venv/bin/activate && \
 		cd src && \
 		python -m pytest ../tests-integration
+
+# Creates build artifact(s)
+package: test
+	rm -rf tmp && \
+		mkdir tmp && \
+		cp -r src/** tmp && \
+		cp -r venv/lib/python3.5/site-packages/shmenkins tmp && \
+		cd tmp && \
+		zip -r $(project_name).zip '.' --include '*.py' && \
+		mv $(project_name).zip ../ && \
+		cd .. && \
+		rm -rf tmp
+
+# Runs more tests
+verify: package
+	tox
+
+# Deploys build artifact(s)
+deploy: verify Makefile.vars
+	aws s3 cp $(project_name).zip s3://$(bucket)/artifacts/$(project_name).zip
 

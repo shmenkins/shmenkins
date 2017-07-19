@@ -1,6 +1,10 @@
-neovim
+# provided
 boto3
+# required
+shmenkins
+# test
 mock
 pytest
 tox
-shmenkins
+# dev
+neovim

@@ -10,7 +10,7 @@ topic_build_status_changed = None  # type: aws.Topic
 cb = None
 
 
-def handler(event: dict, context: dict) -> None:
+def handler(event: dict, ignored: dict) -> None:
     global account
     global topic_build_status_changed
     global cb
@@ -70,14 +70,14 @@ def cb_start_build(project_name: str) -> dict:
     return build
 
 
-def is_resource_not_found_error(e: dict):
+def is_resource_not_found_error(e: ClientError) -> bool:
     try:
         return e.response["Error"]["Code"] == "ResourceNotFoundException"
     except:
         return False
 
 
-def cb_create_project(project_name: str, url: str) -> dict:
+def cb_create_project(project_name: str, url: str) -> None:
     logger.debug("Creating build project; project_name=%s, url=%s", project_name, url)
     project = cb.create_project(
         name=project_name,
@@ -90,7 +90,7 @@ def cb_create_project(project_name: str, url: str) -> dict:
     logger.debug("Created build project; project_name=%s, url=%s, project=%s", project_name, url, str(project))
 
 
-def cb_update_project(project_name: str, url: str) -> dict:
+def cb_update_project(project_name: str, url: str) -> None:
     logger.debug("Updating build project; project_name=%s, url=%s", project_name, url)
     project = cb.update_project(
         name=project_name,
