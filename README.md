@@ -1,5 +1,14 @@
 # shmenkins
 
+## project1.yaml
+```
+---
+source_code: https://github.com/foo/bar
+description: my first project
+builder:
+    name: terraform # this will be mapped to aws_cb + terraform docker image (or aws_lambda since terraform is a light build)
+```
+
 ## Initial setup
 
 Run `$ sudo ./setup.sh` to install the build tools (`cfgen`, `awscli`, `terraform`).
