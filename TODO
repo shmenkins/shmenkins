@@ -1,16 +1,7 @@
-Milestone1: simple code_change->dummy_artifact_built functionality
-
-builder (no-dependency)
-    use aws codebuild (source code must have buildspec.yml)
-
-builder (dependency aware)
-    collect immediate (non-transitive) dependencies
-    publish them to "artifact_updated"
-
-dependency manager
-    on every "artifact_updated" message
-    persist dependency information of that artifact
-    find all downstream dependents of the artifact
-    for every downstream dependent publish "artifact_outdated" message
-
-Milestone2: rebuilds dependent artifacts
+I want to build shmenkins using shmenkins
+    trigger build when code/dependency changes
+        github trigger
+            setup push hook
+    build code (make artifact)
+        aws codebuild 
+            create buildspec.yml
