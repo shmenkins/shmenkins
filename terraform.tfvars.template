@@ -1,6 +1,0 @@
-# this file is read by terraform and sourced by bash, keep it compatible
-
-aws_profile="{{ aws_profile }}"
-aws_account="{{ aws_account }}"
-aws_region="{{ aws_region }}"
-s3_bucket="{{ s3_bucket }}"

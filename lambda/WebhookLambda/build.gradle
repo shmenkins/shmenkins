@@ -1,5 +1,0 @@
-dependencies {
-    compile project(":core"),
-            project(":webhook-handler"),
-            project(":infra-aws")
-}
