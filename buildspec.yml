@@ -1,0 +1,6 @@
+version: 0.2
+phases:
+  build:
+    commands:
+      - ehco command 1
+      - echo command 2
