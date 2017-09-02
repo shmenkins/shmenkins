@@ -33,7 +33,7 @@ package: test
 verify: package
 	tox
 
-# Instals the build artifact(s) locally (~/.cache/shmenkins, similar to ~/.m2/repository)
+# Installs the build artifact(s) locally (~/.cache/shmenkins, similar to ~/.m2/repository)
 install: verify
 	mkdir -p ~/.cache/shmenkins && \
 		cp dist/*.whl ~/.cache/shmenkins/
