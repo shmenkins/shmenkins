@@ -9,14 +9,14 @@ from setuptools import find_packages, setup
 
 
 setup(
-    name="shmenkins",
+    name="shmenkins.utils",
     version="0.1.0",
     license="MIT",
-    description="Shmenkins Library.",
-    long_description="Shmenkins Library.",
+    description="Shmenkins Utilities.",
+    long_description="Shmenkins Utilities.",
     author="Renat Zhilkibaev",
     author_email="rzhilkibaev@gmail.com",
-    url="https://github.com/rzhilkibaev/shmenkins",
+    url="https://github.com/shmenkins/shmenkins.utils",
     packages=find_packages("src"),
     package_dir={"": "src"},
     py_modules=[splitext(basename(path))[0] for path in glob("src/*.py")],
