@@ -10,7 +10,7 @@ builder:
 ```
 
 ## Initial setup
-
+s
 Run `$ sudo ./setup.sh` to install the build tools (`cfgen`, `awscli`, `terraform`).
 Create a versioned S3 bucket in the same region where lambda will be.
 
